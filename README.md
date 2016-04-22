@@ -4,31 +4,31 @@ Use microsoft code with opening current folder for best experience
 
 Happy coding!
 
- 
-# quick build example :
->install node (npm included)
->install mongo run it as a service to 27017
 
->go with a terminal to OBPNodeTsApi folder 
->npm install
--For build with command line
- >npm install tsc -g
- >npm install typescript@next -g
- >tsc
--For build with visual studio
- >open MS VStudio
- >intall node tools addon
- >build project or solution
+# quick build example :<br />
+>install node (npm included)<br />
+>install mongo run it as a service to 27017<br />
+
+>go with a terminal to OBPNodeTsApi folder <br />
+>npm install<br />
+-For build with command line<br />
+ >npm install tsc -g<br />
+ >npm install typescript@next -g<br />
+ >tsc<br />
+-For build with visual studio<br />
+ >open MS VStudio<br />
+ >intall node tools addon<br />
+ >build project or solution<br />
 
 # quick start example :
-go with a terminal to solution folder 
->cd OBPNodeTsApi
->node app.js
->go to internet explorer get http://localhost:3005/
->use a swagger ui  import http://localhost:3005/api.json
+go with a terminal to solution folder <br />
+>cd OBPNodeTsApi<br />
+>node app.js<br />
+>go to internet explorer get http://localhost:3005/<br />
+>use a swagger ui  import http://localhost:3005/api.json<br />
 
-# hints for developement 
->use MS code open folder OBPNodeTsApi for best experiance
->use tsd or typings .Commit typings you use to the repo
->use git ignore. Please be sure if you change it
->use node mongoinput* to input data care change bank and products uid with yours auto populated
+# hints for developement <br />
+>use MS code open folder OBPNodeTsApi for best experiance<br />
+>use tsd or typings .Commit typings you use to the repo<br />
+>use git ignore. Please be sure if you change it<br />
+>use node mongoinput* to input data care change bank and products uid with yours auto populated<br />
