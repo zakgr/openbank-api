@@ -1,0 +1,12 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+
+    // The following will hide the js and map files , node_modules  and visual studio files 
+    "files.exclude": {
+        "**/*.js": true,
+        "**/*.map": true,
+        "**/*.sln": true,
+        "**/*.njsproj": true,
+        "**/node_modules/": true
+    }
+}

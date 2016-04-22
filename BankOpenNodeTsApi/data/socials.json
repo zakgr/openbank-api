@@ -1,0 +1,252 @@
+{
+  "payload": [
+    {
+      "code": "741423423424",
+      "custid": 1,
+      "typen": "katathesi",
+      "hand": "cash",
+      "enable": 1
+    },
+    {
+      "code": "85256758",
+      "custid": 2,
+      "typen": "analipsi",
+      "hand": "cash",
+      "enable": 2
+    },
+    {
+      "code": "9636757",
+      "custid": 3,
+      "typen": "katathesi",
+      "handle": "invoice",
+      "enable": 3
+    },
+    {
+      "code": "12376757",
+      "custid": 4,
+      "typen": "katathesi",
+      "handle": "cash",
+      "enable": 4
+    },
+    {
+      "code": "45654646",
+      "custid": 5,
+      "typen": "analipsi",
+      "handle": "cash",
+      "enable": 5
+    },
+    {
+      "code": "7893243",
+      "custid": 6,
+      "typen": "katathesi",
+      "handle": "cash",
+      "enable": 6
+    },
+    {
+      "code": "159524",
+      "custid": 7,
+      "typen": "analipsi",
+      "handle": "cash",
+      "enable": 7
+    },
+    {
+      "code": "154564",
+      "custid": 8,
+      "typen": "katathesi",
+      "handle": "cash",
+      "enable": 7
+    },
+    {
+      "code": "159675",
+      "custid": 9,
+      "typen": "analipsi",
+      "handle": "cash",
+      "enable": 7
+    },
+    {
+      "code": "159657",
+      "custid": 10,
+      "typen": "katathesi",
+      "handle": "cash",
+      "enable": 7
+    },
+    {
+      "code": "159567",
+      "custid": 11,
+      "typen": "analipsi",
+      "handle": "cash",
+      "enable": 7
+    },
+    {
+      "code": "1593435",
+      "custid": 12,
+      "typen": "analipsi",
+      "handle": "cash",
+      "enable": 7
+    },
+    {
+      "code": "15967335",
+      "custid": 13,
+      "typen": "deposit",
+      "handle": "cash",
+      "enable": 7
+    },
+    {
+      "code": "15967573",
+      "custid": 14,
+      "typen": "analipsi",
+      "handle": "cash",
+      "enable": 7
+    },
+    {
+      "code": "15935763",
+      "custid": 15,
+      "typen": "deposit",
+      "handle": "cash",
+      "enable": 7
+    },
+    {
+      "code": "159536757",
+      "custid": 16,
+      "typen": "analipsi",
+      "handle": "cash",
+      "enable": 7
+    },
+    {
+      "code": "15935763563",
+      "custid": 17,
+      "typen": "danalipsi",
+      "handle": "cash",
+      "enable": 7
+    },
+    {
+      "code": "1597357567",
+      "custid": 18,
+      "typen": "transaction",
+      "handle": "cash",
+      "enable": 7
+    },
+    {
+      "code": "15975737",
+      "custid": 19,
+      "typen": "katathesi",
+      "handle": "cash",
+      "enable": 7
+    },
+    {
+      "code": "159356757",
+      "custid": 20,
+      "typen": "analipsi",
+      "handle": "cash",
+      "enable": 7
+    },
+    {
+      "code": "159567357",
+      "custid": 21,
+      "typen": "analipsi",
+      "handle": "cash",
+      "enable": 7
+    },
+    {
+      "code": "159356757",
+      "custid": 22,
+      "typen": "katathesi",
+      "handle": "cash",
+      "enable": 7
+    },
+    {
+      "code": "159356757",
+      "custid": 23,
+      "typen": "analipsi",
+      "handle": "cash",
+      "enable": 7
+    },
+    {
+      "code": "1593576835",
+      "custid": 24,
+      "typen": "katathesi",
+      "handle": "cash",
+      "enable": 7
+    },
+    {
+      "code": "1593145134",
+      "custid": 25,
+      "typen": "analipsi",
+      "handle": "cash",
+      "enable": 7
+    },
+    {
+      "code": "15953451345",
+      "custid": 26,
+      "typen": "analipsi",
+      "handle": "cash",
+      "enable": 7
+    },
+    {
+      "code": "159134535",
+      "custid": 27,
+      "typen": "analipsi",
+      "handle": "cash",
+      "enable": 7
+    },
+    {
+      "code": "1591345351",
+      "custid": 28,
+      "typen": "katathesi",
+      "handle": "cash",
+      "enable": 7
+    },
+    {
+      "code": "15978975",
+      "custid": 29,
+      "typen": "analipsi",
+      "handle": "cash",
+      "enable": 7
+    },
+    {
+      "code": "159321231",
+      "custid": 30,
+      "typen": "katathesi",
+      "handle": "cash",
+      "enable": 7
+    },
+    {
+      "code": "1593423",
+      "custid": 31,
+      "typen": "analipsi",
+      "handle": "cash",
+      "enable": 7
+    },
+    {
+      "code": "15932423423423",
+      "custid": 32,
+      "typen": "analipsi",
+      "handle": "cash",
+      "enable": 7
+    },
+    {
+      "code": "15923232",
+      "custid": 33,
+      "typen": "katathesi",
+      "handle": "cash",
+      "enable": 7
+    },
+    {
+      "code": "15932323232",
+      "custid": 34,
+      "typen": "analipsi",
+      "handle": "cash",
+      "enable": 7
+    },
+    {
+      "code": "15932323232",
+      "custid": 35,
+      "typen": "katathesi",
+      "handle": "cash",
+      "enable": 7
+    }
+  ],
+  "exception": null,
+  "messages": null,
+  "executionTime": 0
+}

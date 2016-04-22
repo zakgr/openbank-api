@@ -1,0 +1,36 @@
+{
+  "name": "OBPNodeTsApi",
+  "version": "0.0.0",
+  "description": "OBPNodeTsApi",
+  "main": "app.js",
+  "author": {
+    "name": "E40496",
+    "email": "kouvaris.th@nbg.gr"
+  },
+  "scripts": {
+    "tsc": "tsc"
+  },
+  "dependencies": {
+    "body-parser": "~1.15.0",
+    "config": "1.x.x",
+    "cookie-parser": "~1.4.1",
+    "ejs": "2.x.x",
+    "errorhandler": "~1.4.3",
+    "express": "4.13.4",
+    "fs": "0.0.2",
+    "mongoose": "^4.4.7",
+    "mongoose-deep-populate": "^3.0.0",
+    "morgan": "1.7.0",
+    "passport": "~0.3.2",
+    "passport-oauth2": "~1.2.0",
+    "q": "1.4.1",
+    "request": "~2.69.0",
+    "request-ip": "1.2.2",
+    "serve-favicon": "~2.3.0",
+    "swagger-express-middleware": "~0.4.7",
+    "validator": "^5.2.0"
+  },
+  "devDependencies": {
+    "typescript": "~1.8.9"
+  }
+}

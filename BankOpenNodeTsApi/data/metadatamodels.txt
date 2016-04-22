@@ -1,0 +1,104 @@
+import mongoose = require('mongoose');
+
+export interface otherAccountdef extends mongoose.Document {
+    holder?: OtherAccountHolder;
+    number: string;
+    kind?: string;
+    IBAN: string;
+    swift_bic: string;
+    bank?: OtherAccountBank;
+    metadata?: OtherAccountMetadata;
+}
+
+export interface OtherAccountHolder {
+    name?: string;
+    is_alias?: boolean;
+}
+
+export interface OtherAccountBank {
+    national_identifier?: string;
+    name?: string;
+}
+
+export interface OtherAccountMetadata {
+    public_alias?: string;
+    private_alias?: string;
+    more_info?: string;
+    URL?: string;
+    image_URL?: string;
+    open_corporates_URL?: string;
+    corporate_location?: OtherAccountLocation; 
+    physical_location?: OtherAccountLocation;
+}
+
+export interface OtherAccountLocation {
+    latitude?: number;
+    longitude?: number;
+    date?: Date;
+    user?: OtherAccountUser;
+}
+
+export interface OtherAccountUser {
+    provider?: string;
+    id?: string;
+    display_name?: string;
+}
+
+export class otherAccount {
+    _schema: mongoose.Schema = new mongoose.Schema({
+        holder: {
+            name: String,
+            is_alias: Boolean
+        },
+        number: {type: String, required: true, index: { unique: true }},
+        kind: String,
+        IBAN: String,
+        swift_bic: {type: String, required: true, index: { unique: true }},
+        bank: {
+            national_identifier: String,
+            name: String
+        },
+        metadata: {
+            public_alias: String,
+            private_alias: String,
+            more_info: String,
+            URL: String,
+            image_URL: String,
+            open_corporates_URL: String,
+            corporate_location: {
+                latitude: Number,
+                longitude: Number,
+                date: Date,
+                user: {
+                    provider: String,
+                    id: String,
+                    display_name: String
+                }
+            }, 
+            physical_location: {
+                latitude: Number,
+                longitude: Number,
+                date: Date,
+                user: {
+                    provider: String,
+                    id: String,
+                    display_name: String
+                }
+            }
+        },
+        
+    }
+        )
+        .pre('save', function(next) {
+            this.updated = new Date();
+            next();
+        })
+    ;
+    current: mongoose.Model<otherAccountdef>;
+    constructor() {
+        this.current = mongoose.model<otherAccountdef>('otherAccount', this._schema);
+    }
+    set(item: otherAccountdef) {
+        return new this.current(item);
+    }
+}

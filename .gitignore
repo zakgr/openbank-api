@@ -1,0 +1,9 @@
+*.js
+node_modules
+npm-debug.log
+*.map
+*.suo
+*.dat
+[Bb]in/
+[Oo]bj/
+.vs/

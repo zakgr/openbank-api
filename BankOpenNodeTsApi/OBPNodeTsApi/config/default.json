@@ -1,0 +1,32 @@
+﻿{
+  // Customer module configs
+  "maincfg": {
+    "runningport": 3005
+  },
+  "dbConfigs": {
+    "mongodb": {
+      "name": "27017",
+      "type": "mongodb",
+      "host": "localhost",
+      "port": "27017",
+      "connectionstring": "mongodb://localhost:27017"
+    }
+  },
+  "authConfigs": {
+    "internaloauth": {
+      "authorizationURL": "http://localhost:3000/dialog/authorize",
+      "tokenURL": "http://localhost:3000/oauth/token",
+      "clientID": "abc123",
+      "clientSecret": "ssh-secret",
+      "callbackURL": "/auth/login"
+    }
+  },
+  "branchesservice": {
+    "url": "https://www.nbg.gr/branchibankpass/equeueing/api/eQueueing/areaBranches",
+    "bankcode": 111
+  },
+  "atmsservice": {
+    "url": "https://www.nbg.gr/branchibankpass/equeueing/api/eQueueing/areaAtms",
+    "bankcode": 111
+  }
+}

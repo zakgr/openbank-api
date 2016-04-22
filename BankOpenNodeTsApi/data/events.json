@@ -1,0 +1,371 @@
+{
+    "payload": [
+        {
+            "code": "NB087201",
+            "name": "panos",
+            "category": "pelaths",
+            "place": "athens",
+            "attending_count": 1
+        },
+        {
+            "code": "NB087202",
+            "name": "akis",
+            "category": "pelaths",
+            "place": "thessaloniki",
+            "attending_count": 2
+        },
+        {
+            "code": "NB087203",
+            "name": "akis",
+            "category": "pelaths",
+            "place": "peiraias",
+            "attending_count": 3
+        },
+        {
+            "code": "NB087204",
+            "name": "mathaios",
+            "category": "pelaths",
+            "place": "ioannina",
+            "attending_count": 4
+        },
+        {
+            "code": "NB087205",
+            "name": "giwrgos",
+            "category": "pelaths",
+            "place": "larissa",
+            "attending_count": 5
+        },
+        {
+            "code": "NB087206",
+            "name": "panagiwta",
+            "category": "pelaths",
+            "place": "rodos",
+            "attending_count": 6
+        },
+        {
+            "code": "NB087207",
+            "name": "giannis",
+            "category": "pelaths",
+            "place": "ios",
+            "attending_count": 7
+        },
+        {
+            "code": "NB087208",
+            "name": "giannis",
+            "category": "pelaths",
+            "place": "mikonos",
+            "attending_count": 8
+        },
+        {
+            "code": "NB087209",
+            "name": "giannis",
+            "category": "pelaths",
+            "place": "alexandroupoli",
+            "attending_count": 9
+        },
+        {
+            "code": "NB087210",
+            "name": "giannis",
+            "category": "pelaths",
+            "place": "xanthi",
+            "attending_count": 10
+        },
+        {
+            "code": "NB087211",
+            "name": "giannis",
+            "category": "pelaths",
+            "place": "kerkira",
+            "attending_count": 11
+        },
+        {
+            "code": "NB087212",
+            "name": "giannis",
+            "category": "pelaths",
+            "place": "xania",
+            "attending_count": 12
+        },
+        {
+            "code": "NB087213",
+            "name": "katerina",
+            "category": "pelaths",
+            "place": "milos",
+            "attending_count": 13
+        },
+        {
+            "code": "NB087214",
+            "name": "voula",
+            "category": "pelaths",
+            "place": "athina",
+            "attending_count": 14
+        },
+        {
+            "code": "NB087215",
+            "name": "martha",
+            "category": "pelaths",
+            "place": "thassoniki",
+            "attending_count": 15
+        },
+        {
+            "code": "NB087216",
+            "name": "paulos",
+            "category": "pelaths",
+            "place": "tripoli",
+            "attending_count": 16
+        },
+        {
+            "code": "NB087217",
+            "name": "aspa",
+            "category": "pelaths",
+            "place": "kalamata",
+            "attending_count": 17
+        },
+        {
+            "code": "NB087218",
+            "name": "gianna",
+            "category": "pelaths",
+            "place": "athens",
+            "attending_count": 18
+        },
+        {
+            "code": "NB087219",
+            "name": "zwi",
+            "category": "pelaths",
+            "place": "agrinio",
+            "attending_count": 19
+        },
+        {
+            "code": "NB087220",
+            "name": "poppi",
+            "category": "pelaths",
+            "place": "xristina",
+            "attending_count": 20
+        },
+        {
+            "code": "NB087221",
+            "name": "bironas",
+            "category": "pelaths",
+            "place": "tripoli",
+            "attending_count": 21
+        },
+        {
+            "code": "NB087222",
+            "name": "stratos",
+            "category": "pelaths",
+            "place": "kriti",
+            "attending_count": 22
+        },
+        {
+            "code": "NB087222",
+            "name": "stafanos",
+            "category": "pelaths",
+            "place": "athina",
+            "attending_count": 22
+        },
+        {
+            "code": "NB087223",
+            "name": "grigoris",
+            "category": "pelaths",
+            "place": "giannena",
+            "attending_count": 23
+        },
+        {
+            "code": "NB087224",
+            "name": "kleanthis",
+            "category": "pelaths",
+            "place": "tripoli",
+            "attending_count": 24
+        },
+        {
+            "code": "NB087225",
+            "name": "xristos",
+            "category": "pelaths",
+            "place": "karditsa",
+            "attending_count": 25
+        },
+        {
+            "code": "NB087226",
+            "name": "dimitris",
+            "category": "pelaths",
+            "place": "patra",
+            "attending_count": 26
+        },
+        {
+            "code": "NB087227",
+            "name": "fotini",
+            "category": "pelaths",
+            "place": "kavala",
+            "attending_count": 27
+        },
+        {
+            "code": "NB087228",
+            "name": "giota",
+            "category": "pelaths",
+            "place": "alexandroupoli",
+            "attending_count": 28
+        },
+        {
+            "code": "NB087229",
+            "name": "labrini",
+            "category": "pelaths",
+            "place": "labrini",
+            "attending_count": 29
+        },
+        {
+            "code": "NB0872230",
+            "name": "bironas",
+            "category": "pelaths",
+            "place": "lamia",
+            "attending_count": 30
+        },
+        {
+            "code": "NB087231",
+            "name": "stratos",
+            "category": "pelaths",
+            "place": "pireas",
+            "attending_count": 31
+        },
+        {
+            "code": "NB087232",
+            "name": "athina",
+            "category": "pelaths",
+            "place": "aigina",
+            "attending_count": 32
+        },
+        {
+            "code": "NB087233",
+            "name": "panagiotis",
+            "category": "pelaths",
+            "place": "lamia",
+            "attending_count": 33
+        },
+        {
+            "code": "NB087234",
+            "name": "baggelis",
+            "category": "pelaths",
+            "place": "mitilini",
+            "attending_count": 34
+        },
+        {
+            "code": "NB087235",
+            "name": "basw",
+            "category": "pelaths",
+            "place": "drama",
+            "attending_count": 35
+        },
+        {
+            "code": "NB087236",
+            "name": "alkistis",
+            "category": "pelaths",
+            "place": "kalamata",
+            "attending_count": 36
+        },
+        {
+            "code": "NB087237",
+            "name": "georgia",
+            "category": "pelaths",
+            "place": "athina",
+            "attending_count": 37
+        },
+        {
+            "code": "NB087238",
+            "name": "kimonas",
+            "category": "pelaths",
+            "place": "kriti",
+            "attending_count": 38
+        },
+        {
+            "code": "NB087239",
+            "name": "stilianos",
+            "category": "pelaths",
+            "place": "patra",
+            "attending_count": 39
+        },
+        {
+            "code": "NB087240",
+            "name": "orestis",
+            "category": "pelaths",
+            "place": "xalkididiki",
+            "attending_count": 40
+        },
+        {
+            "code": "NB087241",
+            "name": "mpampis",
+            "category": "pelaths",
+            "place": "zakinthos",
+            "attending_count": 41
+        },
+        {
+            "code": "NB087242",
+            "name": "froso",
+            "category": "pelaths",
+            "place": "kriti",
+            "attending_count": 42
+        },
+        {
+            "code": "NB087243",
+            "name": "bagelis",
+            "category": "pelaths",
+            "place": "tripoli",
+            "attending_count": 43
+        },
+        {
+            "code": "NB087244",
+            "name": "bironas",
+            "category": "pelaths",
+            "place": "karditsa",
+            "attending_count": 44
+        },
+        {
+            "code": "NB087244",
+            "name": "sabbas",
+            "category": "pelaths",
+            "place": "larissa",
+            "attending_count": 44
+        },
+        {
+            "code": "NB087245",
+            "name": "iasonas",
+            "category": "pelaths",
+            "place": "kefalonia",
+            "attending_count": 45
+        },
+        {
+            "code": "NB087246",
+            "name": "alkistis",
+            "category": "pelaths",
+            "place": "xania",
+            "attending_count": 46
+        },
+        {
+            "code": "NB087247",
+            "name": "labrini",
+            "category": "pelaths",
+            "place": "hraklio",
+            "attending_count": 47
+        },
+        {
+            "code": "NB087248",
+            "name": "aristos",
+            "category": "pelaths",
+            "place": "larissa",
+            "attending_count": 48
+        },
+        {
+            "code": "NB087249",
+            "name": "alexandros",
+            "category": "pelaths",
+            "place": "drama",
+            "attending_count": 49
+        },
+        {
+            "code": "NB087250",
+            "name": "polina",
+            "category": "pelaths",
+            "place": "athina",
+            "attending_count": 21
+        }
+    ],
+    "exception": null,
+    "messages": null,
+    "executionTime": 0
+}

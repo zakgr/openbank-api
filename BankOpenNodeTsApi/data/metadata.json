@@ -1,0 +1,61 @@
+{
+  "metadata": [
+    {
+      "text": {
+          "id": "copyright2016",
+          "name": "Copyright 2016 NBG 942-52-C"
+      },
+      "id": "5717244442f0d6001dff6c78"
+    },
+    {
+      "text": "the public alias of the other account holder",
+      "id": "57174e5ba9fd4454150e49ca"
+    },
+    {
+      "text": "the private alias of the other account holder",
+      "id": "571756ced7acc33c2f5ad8fe"
+    },
+    {
+      "text": "short text explaining who the other party of the transaction is",
+      "id": "5717571cd7acc33c2f5ad8ff"
+    },
+    {
+      "text": "a URL related to the other party e.g. the website of the company",
+      "id": "57175725d7acc33c2f5ad900"
+    },
+    {
+      "text": "an image URL related to the other party e.g. company logo",
+      "id": "57175732d7acc33c2f5ad901"
+    },
+    {
+      "text": "the company corporate URL in the http://nbg.gr/ web service",
+      "id": "57175739d7acc33c2f5ad902"
+    },
+    {
+      "text": {
+          "user": {
+            "display_name": "display name of user",
+            "id": "ID (given by the user's provider) of the user making the comment",
+            "provider": "name of party that authorized the user e.g. bank_name/facebook/twitter"
+          },
+          "date": "date of posting the geo tag",
+          "longitude": -122.083739,
+          "latitude": 37.423021
+      },
+      "id": "57175746d7acc33c2f5ad903"
+    },
+    {
+      "text": {
+          "user": {
+            "display_name": "display name of user",
+            "id": "ID (given by the user's provider) of the user making the comment",
+            "provider": "name of party that authorized the user e.g. bank_name/facebook/twitter"
+          },
+          "date": "date of posting the geo tag",
+          "longitude": -122.083739,
+          "latitude": 37.423021
+      },
+      "id": "5717574fd7acc33c2f5ad904"
+    }
+  ]
+}
