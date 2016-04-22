@@ -4,7 +4,7 @@ Use microsoft code with opening current folder for best experience
 
 Happy coding!
 
-
+ 
 # quick build example :
 >install node (npm included)
 >install mongo run it as a service to 27017
