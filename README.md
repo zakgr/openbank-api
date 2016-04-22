@@ -18,17 +18,17 @@ Happy coding!
 -For build with visual studio<br />
  >open MS VStudio<br />
  >intall node tools addon<br />
+ >open the project or solution file<br />
  >build project or solution<br />
 
 # quick start example :
-go with a terminal to solution folder <br />
->cd OBPNodeTsApi<br />
+go with a terminal to OBPNodeTsApi folder <br />
 >node app.js<br />
 >go to internet explorer get http://localhost:3005/<br />
 >use a swagger ui  import http://localhost:3005/api.json<br />
 
 # hints for developement <br />
->use MS code open folder OBPNodeTsApi for best experiance<br />
+>use MS code open root folder for best experiance<br />
 >use tsd or typings .Commit typings you use to the repo<br />
 >use git ignore. Please be sure if you change it<br />
 >use node mongoinput* to input data care change bank and products uid with yours auto populated<br />
