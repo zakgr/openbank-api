@@ -28,7 +28,7 @@ go with a terminal to OBPNodeTsApi folder <br />
 >use a swagger ui  import http://localhost:3005/api.json<br />
 
 # hints for developement <br />
->use MS code open root folder for best experiance<br />
+>use MS code open root git project folder for best experiance<br />
 >use tsd or typings .Commit typings you use to the repo<br />
 >use git ignore. Please be sure if you change it<br />
 >use node mongoinput* to input data care change bank and products uid with yours auto populated<br />
