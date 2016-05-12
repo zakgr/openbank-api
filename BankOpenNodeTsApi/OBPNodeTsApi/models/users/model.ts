@@ -1,43 +1,108 @@
 ﻿import mongoose = require('mongoose');
 
 export interface userdef extends mongoose.Document {
-    userId: number;
-    userName: string;
+    short_name: string;
     name: string;
-    authCode: string;
-    userIp: string;
-    created?: any;
+    can_add_bank?: boolean;
+    can_add_users?: boolean;
+    can_edit_banks?: boolean;
+    can_edit_users?: boolean;
+    providers?: [
+        {
+            auth_provider_name: string;
+            auth_id: string;
+        }
+    ];
+    bank_permissions?: [
+        {
+            bank_id: any;
+            customer_id?: any;
+            can_edit_branches?: boolean;
+            can_edit_atms?: boolean;
+            can_edit_products?: boolean;
+            can_edit_customers?: boolean;
+            can_see_all_accounts?: boolean;
+            can_add_all_accounts?: boolean;
+            can_edit_all_accounts?: boolean;
+            can_see_all_transactions_for_banks?: boolean;
+            can_add_all_transactions_for_banks?: boolean;
+            can_edit_all_transactions_for_banks?: boolean;
+        }
+    ];
     updated?: any;
-
 }
 
 export class user {
     _schema: mongoose.Schema = new mongoose.Schema({
-        id: {
-            type: Number, required: true, index: { unique: true }
+        short_name: {
+            type: String, required: true, trim: true
         },
-        userName: {
-            type: String, required: true
+        display_name: {
+            type: String, required: true, trim: true
         },
-        name: {
-            type: String, required: true
+        can_add_bank: {
+            type: Boolean
         },
-        authCode: {
-            type: String, required: true
+        can_add_users: {
+            type: Boolean
         },
-        userIp: {
-            type: String, required: true
+        can_edit_banks: {
+            type: Boolean
         },
-        created: {
-            type: Date,
-            default: Date.now
+        can_edit_users: {
+            type: Boolean
         },
+        providers: [
+            {
+                auth_provider_name: {
+                    type: String, required: true, trim: true
+                },
+                auth_id: {
+                    type: String, required: true, trim: true
+                }
+            }
+        ],
+        bank_permissions: [
+            {
+                bank_id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'bank' },
+                customer_id: { type: mongoose.Schema.Types.ObjectId,  ref: 'customer' },
+                can_edit_branches: {
+                    type: Boolean
+                },
+                can_edit_atms: {
+                    type: Boolean
+                },
+                can_edit_products: {
+                    type: Boolean
+                },
+                can_edit_customers: {
+                    type: Boolean
+                },
+                can_see_all_accounts: {
+                    type: Boolean
+                },
+                can_add_all_accounts: {
+                    type: Boolean
+                },
+                can_edit_all_accounts: {
+                    type: Boolean
+                },
+                can_see_all_transactions_for_banks: {
+                    type: Boolean
+                },
+                can_add_all_transactions_for_banks: {
+                    type: Boolean
+                },
+                can_edit_all_transactions_for_banks: {
+                    type: Boolean
+                }
+            }
+        ],
         updated: {
-            type: Date,
-            default: Date.now
+            type: Date
         }
     })
-        .pre('save', function (next) {
+        .pre('save', function(next) {
             this.updated = new Date();
             next();
         });
@@ -45,18 +110,7 @@ export class user {
     constructor() {
         this.current = mongoose.model<userdef>('user', this._schema);
     }
-    set(id: number,
-        userName: string,
-        name: string,
-        authCode: string,
-        userIp: string,
-        _id?: string) {
-        return new this.current({
-            id: id,
-            userName: userName,
-            name: name,
-            authCode: authCode,
-            userIp: userIp
-        });
+    set(item: userdef) {
+        return new this.current(item);
     }
 }

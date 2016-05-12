@@ -18,9 +18,9 @@ export interface branchedef extends mongoose.Document {
     acceptsDeposits?: any;
     meta?: {
         license?: any;
-        };
+    };
     lobby?: { is24Hours?: any; };
-    bank?: any;
+    bank_id?: any;
     islocked?: any;
     updated?: any;
 }
@@ -28,29 +28,29 @@ export interface branchedef extends mongoose.Document {
 export class branche {
     _schema: mongoose.Schema = new mongoose.Schema({
         name: {
-            type: String, required: true, index: { unique: true }
+            type: String, required: true, trim: true, index: { unique: true }
         },
         address: {
             line_1: {
-                type: String
+                type: String, trim: true
             },
             line_2: {
-                type: String
+                type: String, trim: true
             },
             line_3: {
-                type: String
+                type: String, trim: true
             },
             city: {
-                type: String
+                type: String, trim: true
             },
             state: {
-                type: String
+                type: String, trim: true
             },
             postcode: {
-                type: String
+                type: String, trim: true
             },
             country: {
-                type: String
+                type: String, trim: true
             }
         },
         location: {
@@ -73,7 +73,7 @@ export class branche {
             }
         },
         meta: { license: { type: mongoose.Schema.Types.ObjectId, ref: 'metadata' } },
-        bank: { type: mongoose.Schema.Types.ObjectId, ref: 'bank' , select: false },
+        bank_id: { type: mongoose.Schema.Types.ObjectId, ref: 'bank', select: false },
         islocked: {
             type: Boolean, select: false
         },

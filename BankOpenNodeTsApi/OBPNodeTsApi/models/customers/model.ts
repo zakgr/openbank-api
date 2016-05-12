@@ -24,46 +24,46 @@ export interface CustomerFaceImage {
 export class customer {
     _schema: mongoose.Schema = new mongoose.Schema({
         legal_name: {
-            type: String, required: true, index: { unique: false }
+            type: String, required: true, trim: true, index: { unique: false }
         },
         mobile_phone_number: {
-            type: String
+            type: String, trim: true
         },
         email: {
-            type: String
+            type: String, trim: true
         },
         faceImage: mongoose.Schema.Types.Mixed,
         crm: mongoose.Schema.Types.Mixed,
         string_values: [
             {
-                key: {type: String},
-                string: {type: String}
+                key: { type: String, trim: true },
+                string: { type: String, trim: true }
             }
         ],
         date_values: [
             {
-                key: {type: String},
-                string: {type: Date}
+                key: { type: String, trim: true },
+                string: { type: Date, trim: true }
             }
         ],
         numeric_values: [
             {
-                key: {type: String},
-                string: {type: Number}
+                key: { type: String, trim: true },
+                string: { type: Number }
             }
         ],
-        accounts:  { type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'account' }], select: false },
-        meta:  { type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'metadata' }], select: false },
+        accounts: { type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'account' }], select: false },
+        meta: { type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'metadata' }], select: false },
         bank_id: { type: mongoose.Schema.Types.ObjectId, ref: 'bank', select: false },
         islocked: {
-            type: Boolean,select:false
+            type: Boolean, select: false
         },
         updated: {
-            type: Date,select:false
+            type: Date, select: false
         }
     }
-        )
-        .pre('save', function(next) {
+    )
+        .pre('save', function (next) {
             this.updated = new Date();
             next();
         });

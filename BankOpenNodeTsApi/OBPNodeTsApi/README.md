@@ -1,6 +1,8 @@
 ﻿# OBPNodeTsApi
 Requirements: mongo, node tools for VS (or use typescript npm cmd commands)
- 
+
+Functional Design
+https://docs.google.com/document/d/1CRQFwJgBT08NGS3HeUvFshkHzXVHToN6E3NDot9nI8A/edit?usp=sharing
 
 Solution for api with Node ,Typescript and Mongo
 
@@ -49,7 +51,7 @@ install of required packages from -npm under solution can be altered or from con
  done 9 Create documentation on swagger 
  done 9.2 Clear a git repo for public use as sandbox
  done 9.3 add script for populate fake data
-9.6 fix create date bug
+done 9.6 fix create date bug
 9.9 fix required in models better
 10 lock all not public methods
 

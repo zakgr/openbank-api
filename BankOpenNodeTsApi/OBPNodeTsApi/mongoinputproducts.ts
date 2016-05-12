@@ -2,8 +2,13 @@
 import mongoose = require('mongoose');
 import fs =  require('fs');
 import config = require('config');
-mongoose.connect(config.get<string>('dbConfigs.mongodb.connectionstring'));
-
+//connect database
+mongoose.connect(
+    config.get<string>('dbConfigs.mongodb.type') + "://" +
+    config.get<string>('dbConfigs.mongodb.host') + ":" +
+    config.get<string>('dbConfigs.mongodb.port') + "/" +
+    config.get<string>('dbConfigs.mongodb.name')
+);
 
 var lineReader = require('readline').createInterface({
   input: require('fs').createReadStream('.././data/products.csv')

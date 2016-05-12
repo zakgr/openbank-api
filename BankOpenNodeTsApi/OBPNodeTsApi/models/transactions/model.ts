@@ -52,46 +52,46 @@ export interface transactionMetadata {
 
 export class transaction {
     _schema: mongoose.Schema = new mongoose.Schema({
-        uuid: { type: String },
+        uuid: { type: String, trim: true },
         details: {
             status: String,
-            posted_by_user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'user'},
-            approved_by_user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'user'},
-            paused_by_user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'user'},
-            cancelled_by_user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'user'},
-            posted_by_ip_address: { type: String},
-            approved_by_ip_address: { type: String},
-            paused_by_ip_address: { type:String},
-            cancelled_by_ip_address: { type: String},
-            type: String,
-            description: String,
+            posted_by_user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
+            approved_by_user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
+            paused_by_user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
+            cancelled_by_user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
+            posted_by_ip_address: { type: String, trim: true },
+            approved_by_ip_address: { type: String, trim: true },
+            paused_by_ip_address: { type: String, trim: true },
+            cancelled_by_ip_address: { type: String, trim: true },
+            type: { type: String, trim: true },
+            description: { type: String, trim: true },
             posted: Date,
             completed: Date,
             new_balance: {
-                currency: String,
+                currency: { type: String, trim: true },
                 amount: Number
             },
             value: {
-                currency: String,
+                currency: { type: String, trim: true },
                 amount: Number
             }
         },
 
-        this_account: { type: mongoose.Schema.Types.ObjectId, ref: 'otherAcoount'},
-        other_account: { type: mongoose.Schema.Types.ObjectId, ref: 'otherAcoount'},
-        this_account_insystem: { type: mongoose.Schema.Types.ObjectId, ref: 'account'},
-        other_account_insystem: { type: mongoose.Schema.Types.ObjectId, ref: 'account'},
+        this_account: { type: mongoose.Schema.Types.ObjectId, ref: 'otherAccount' },
+        other_account: { type: mongoose.Schema.Types.ObjectId, ref: 'otherAccount' },
+        this_account_insystem: { type: mongoose.Schema.Types.ObjectId, ref: 'account' },
+        other_account_insystem: { type: mongoose.Schema.Types.ObjectId, ref: 'account' },
 
         metadata: {
-            narrative: { type: mongoose.Schema.Types.ObjectId, ref: 'metadata'},
-            comments: { type: mongoose.Schema.Types.ObjectId, ref: 'metadata'},
-            tags: { type: mongoose.Schema.Types.ObjectId, ref: 'metadata'},
-            where: { type: mongoose.Schema.Types.ObjectId, ref: 'metadata'},
+            narrative: { type: mongoose.Schema.Types.ObjectId, ref: 'metadata' },
+            comments: { type: mongoose.Schema.Types.ObjectId, ref: 'metadata' },
+            tags: { type: mongoose.Schema.Types.ObjectId, ref: 'metadata' },
+            where: { type: mongoose.Schema.Types.ObjectId, ref: 'metadata' },
         },
 
     }
     )
-        .pre('save', function(next) {
+        .pre('save', function (next) {
             this.updated = new Date();
             next();
         })

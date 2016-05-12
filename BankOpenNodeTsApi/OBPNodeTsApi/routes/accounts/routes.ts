@@ -1,26 +1,18 @@
 ﻿/*
  Api routes 
  */
-var isAuthenticated = require('../../isAuthenticated');
+import passport = require('passport');
 import accounts = require('../../implementation/accounts/implementation');
 var router = require('express').Router();
-
-/* GET list */
-router.get('/list',  accounts.list);
-router.post('/list',  accounts.list);
+var path = '/accounts';
 
 /* Rest Api Full */
-router.get('/rest',  accounts.list);
-router.post('/rest',  accounts.listmore);
-router.put('/rest',  accounts.set);
-router.delete('/rest',  accounts.del);
-/* GET get */
-router.post('/get',  accounts.get);
+router.get('/banks/:bid' + path, passport.authenticate('custom'), accounts.listbid);//listall
+router.post('/banks/:bid' + path, passport.authenticate('custom'), accounts.listmore);//search
+router.put('/banks/:bid' + path, passport.authenticate('custom'), accounts.set);//insert new bank
 
-/* GET set */
-router.post('/set',  accounts.set);
-
-/* GET del */
-router.post('/del',   accounts.del);
+router.get('/banks/:bid' + path + '/:id', passport.authenticate('custom'), accounts.listid);//get by id
+router.put('/banks/:bid' + path + '/:id', passport.authenticate('custom'), accounts.set);//update existing account
+router.delete('/banks/:bid' + path + '/:id', passport.authenticate('custom'), accounts.del);//delete with id
 
 module.exports = router;

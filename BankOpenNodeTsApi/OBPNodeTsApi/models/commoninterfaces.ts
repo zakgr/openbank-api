@@ -1,5 +1,4 @@
-﻿
-export interface phone {
+﻿export interface phone {
     number: string;
     numbertype: string;
 }

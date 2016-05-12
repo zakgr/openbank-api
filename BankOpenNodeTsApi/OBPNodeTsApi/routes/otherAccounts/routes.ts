@@ -2,24 +2,18 @@
  Api routes 
  */
 //this is an interface to take otherAccounts
+import passport = require('passport');
 import otherAccounts = require('../../implementation/otherAccounts/implementation');
 var router = require('express').Router();
-var isAuthenticated = require('../../isAuthenticated');
-
-/* GET list */
-router.get('/list',  otherAccounts.list);
-router.post('/list',  otherAccounts.list);
+var path = '/other_accounts';
 
 /* Rest Api Full */
-router.get('/rest',  otherAccounts.list);
-router.post('/rest',  otherAccounts.listmore);
-router.put('/rest',  otherAccounts.set);
-router.delete('/rest',  otherAccounts.del);
+router.get('/banks/:bid/accounts/:acid/:vid' + path, passport.authenticate('custom'), otherAccounts.listbid);//get all other account of a bank by id
+router.post('/banks/:bid/accounts/:acid/:vid' + path, passport.authenticate('custom'), otherAccounts.listmore);//search
+router.put('/banks/:bid/accounts/:acid/:vid' + path, passport.authenticate('custom'), otherAccounts.set);//insert other account
 
-///* GET set */
-router.post('/set', otherAccounts.set);
-
-///* GET del */
-router.post('/del', otherAccounts.del);
+router.get('/banks/:bid/accounts/:acid/:vid' + path + '/:id', passport.authenticate('custom'), otherAccounts.listid);//get one other account of a bank by id
+router.put('/banks/:bid/accounts/:acid/:vid' + path + '/:id', passport.authenticate('custom'), otherAccounts.set);//update existing other account
+router.delete('/banks/:bid/accounts/:acid/:vid' + path + '/:id', passport.authenticate('custom'),otherAccounts.del);//delete with id
 
 module.exports = router;

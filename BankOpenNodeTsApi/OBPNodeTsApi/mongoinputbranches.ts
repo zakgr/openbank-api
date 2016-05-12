@@ -2,7 +2,13 @@
 import mongoose = require('mongoose');
 import fs = require('fs');
 import config = require('config');
-mongoose.connect(config.get<string>('dbConfigs.mongodb.connectionstring'));
+//connect database
+mongoose.connect(
+    config.get<string>('dbConfigs.mongodb.type') + "://" +
+    config.get<string>('dbConfigs.mongodb.host') + ":" +
+    config.get<string>('dbConfigs.mongodb.port') + "/" +
+    config.get<string>('dbConfigs.mongodb.name')
+);
 console.log("start");
 //Input atms
 import atms = require('./models/branches/model');
@@ -34,13 +40,13 @@ obj.payload.forEach(function(item) {
             acceptsDeposits: item.acceptsDeposits,
             islocked: true,
             meta:{license:"5717244442f0d6001dff6c78"},
-            banks: "5710bba5d42604e4072d1e72"
+            bank_id: "5710bba5d42604e4072d1e72"
         };
 
         var c = b.set(a);
         c.save(function(err, item: any) {
             if (err) throw err;
-            console.log('atm saved successfully!');
+            console.log('branch saved successfully!');
             if (item != null) {
             }
         });

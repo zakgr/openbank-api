@@ -1,69 +1,50 @@
 ﻿//account implementation
 import express = require('express');
 import accountsservice = require('../../services/accounts/service');
+import commonfunct = require('../../implementation/commonfunct');
 
-export function list(req: express.Request, res: express.Response, next) {
-    accountsservice.listAll().then(
-        function (resp) {
-            res.json(
-                { accounts: resp }
-            )
-        }
+export function listbid(req: express.Request, res: express.Response, next) {
+    var question: any = {};
+    question.bank_id = req.params.bid;
+    accountsservice.listBid(question).then(
+        function (resp) { res.json({ accounts: resp }) }
+    );
+};
+export function listid(req: express.Request, res: express.Response, next) {
+    var question: any = {};
+    question.bank_id = req.params.bid;
+    question._id = req.params.id;
+    accountsservice.listId(question).then(
+        function (resp) { res.json(resp) }
     );
 };
 export function listmore(req: express.Request, res: express.Response, next) {
     var question: any = {};
-    // like example new RegExp(req.body.payload.name, "i") 
-    if (req.body.payload.label) { question.label = new RegExp(req.body.payload.label, "i"); }
-    if (req.body.payload.type_id) { question.type = req.body.payload.type_id; }
-    if (req.body.payload.IBAN) { question.IBAN = req.body.payload.IBAN; }
-    if (req.body.payload.id) { question._id = req.body.payload.id; }
+    // like example new RegExp(req.body.name, "i") 
+    if (req.body.label) { question.label = commonfunct.customcontainsregexp(req.body.label); }
+    if (req.body.type_id) { question.type = req.body.type_id; }
+    if (req.body.IBAN) { question.IBAN = req.body.IBAN; }
+    if (req.params.id) { question._id = req.params.id; }
+    if (req.params.bid) { question.bank_id = req.params.bid; }
     if (JSON.stringify(question) === "{}") {
-        res.json({ reqwas: req.body.payload, error: "No input data or wrong input data" })
+        res.json({ reqwas: req.body, error: "No input data or wrong input data" })
     }
     accountsservice.listMore(question).then(
-        function (resp) {
-            res.json(
-                { accounts: resp }
-            )
-        }
-    );
-};
-export function get(req: express.Request, res: express.Response, next) {
-    var question: any = {};
-    // like example new RegExp(req.body.payload.name, "i") 
-    if (req.body.payload.label) { question.label = new RegExp(req.body.payload.label, "i"); }
-    if (req.body.payload.type_id) { question.type = req.body.payload.type_id; }
-    if (req.body.payload.IBAN) { question.IBAN = req.body.payload.IBAN; }
-    if (req.body.payload.id) { question._id = req.body.payload.id; }
-    if (JSON.stringify(question) === "{}") {
-        res.json({ reqwas: req.body.payload, error: "No input data or wrong input data" })
-    }
-    accountsservice.list(question).then(
-        function (resp) { res.json(resp) }
+        function (resp) { res.json({ accounts: resp }) }
     );
 };
 export function set(req: express.Request, res: express.Response, next) {
     var question: any = {};
-    // like example new RegExp(req.body.payload.name, "i") 
-    if (req.body.payload.id) { question._id = req.body.payload.id; }
-    if (!req.body.payload.insert) {
-        res.json({ reqwas: req.body.payload, error: "No insert input" })
-    }
-    //if (JSON.stringify(question) === "{}") {
-    //    res.json({ reqwas: req.body.payload, error: "No input data or wrong input data" })
-    //}
-    accountsservice.set(question, req.body.payload.insert).then(
+    var input = req.body;
+    if (req.params.id) { question._id = req.params.id; }
+    input.bank = req.params.bid;
+    accountsservice.set(question, input).then(
         function (resp) { res.json(resp) }
     );
 };
 export function del(req: express.Request, res: express.Response, next) {
     var question: any = {};
-    // like example new RegExp(req.body.payload.name, "i") 
-    if (req.body.payload.id) { question._id = req.body.payload.id; }
-    if (JSON.stringify(question) === "{}") {
-        res.json({ reqwas: req.body.payload, error: "No input data or wrong input data" })
-    }
+    if (req.params.id) { question._id = req.params.id; }
     accountsservice.del(question).then(
         function (resp) { res.json(resp) }
     );

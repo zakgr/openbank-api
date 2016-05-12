@@ -17,9 +17,9 @@ export interface atmdef extends mongoose.Document {
     };
     meta?: {
         license?: any;
-        };
+    };
     lobby?: { is24Hours?: any; };
-    bank?: any;
+    bank_id?: any;
     islocked?: any;
     updated?: any;
 }
@@ -27,7 +27,7 @@ export interface atmdef extends mongoose.Document {
 export class atm {
     _schema: mongoose.Schema = new mongoose.Schema({
         name: {
-            type: String, required: true, index: { unique: true }
+            type: String, required: true, trim: true, index: { unique: true }
         },
         location: {
             latitude: {
@@ -42,25 +42,25 @@ export class atm {
         },
         address: {
             line_1: {
-                type: String
+                type: String, trim: true
             },
             line_2: {
-                type: String
+                type: String, trim: true
             },
             line_3: {
-                type: String
+                type: String, trim: true
             },
             city: {
-                type: String
+                type: String, trim: true
             },
             state: {
-                type: String
+                type: String, trim: true
             },
             postcode: {
-                type: String
+                type: String, trim: true
             },
             country: {
-                type: String
+                type: String, trim: true
             }
         },
         lobby: {
@@ -69,7 +69,7 @@ export class atm {
             }
         },
         meta: { license: { type: mongoose.Schema.Types.ObjectId, ref: 'metadata' } },
-        bank: { type: mongoose.Schema.Types.ObjectId, ref: 'bank' , select: false },
+        bank_id: { type: mongoose.Schema.Types.ObjectId, ref: 'bank', select: false },
         islocked: {
             type: Boolean, select: false
         },

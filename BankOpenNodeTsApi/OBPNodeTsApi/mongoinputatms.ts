@@ -2,7 +2,14 @@
 import mongoose = require('mongoose');
 import fs =  require('fs');
 import config = require('config');
-mongoose.connect(config.get<string>('dbConfigs.mongodb.connectionstring'));
+//connect database
+mongoose.connect(
+    config.get<string>('dbConfigs.mongodb.type') + "://" +
+    config.get<string>('dbConfigs.mongodb.host') + ":" +
+    config.get<string>('dbConfigs.mongodb.port') + "/" +
+    config.get<string>('dbConfigs.mongodb.name')
+);
+
 
 //Input atms
 import atms = require('./models/atms/model');
@@ -32,7 +39,7 @@ obj.payload.forEach(function (item) {
             is24Hours: item.is24Hours,
             islocked: true,
             meta:{license:"5717244442f0d6001dff6c78"},
-            bank: "5710bba5d42604e4072d1e72"
+            bank_id: "5710bba5d42604e4072d1e72"
         };
         
         var c = b.set(a);

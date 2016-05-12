@@ -1,6 +1,6 @@
 ﻿import mongoose = require('mongoose');
 
- //to be more accurate implementation
+//to be more accurate implementation
 export interface metadatadef extends mongoose.Document {
     text: any;
     postedBy?: string;
@@ -15,21 +15,21 @@ export class metadata {
             type: mongoose.Schema.Types.Mixed, required: true
         },
         postedBy: {
-            type: String
+            type: String, trim: true
         },
         islocked: {
-            type: Boolean,select:false
+            type: Boolean, select: false
         },
         updated: {
-            type: Date,select:false
+            type: Date, select: false
         }
     }
-        )
-        .pre('save', function(next) {
+    )
+        .pre('save', function (next) {
             this.updated = new Date();
             next();
         });
-      
+
     current: mongoose.Model<metadatadef>;
     constructor() {
         this.current = mongoose.model<metadatadef>('metadata', this._schema);

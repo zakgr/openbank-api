@@ -9,7 +9,7 @@ var transactionmodel = new transactionsmodels.transaction();
 //Transform
 var accountschema = transactionmodel._schema;
 accountschema.set('toJSON', {
-    transform: function(doc, ret, options) {
+    transform: function (doc, ret, options) {
         try { ret.this_account = ret.this_account.text; } catch (err) { }
         try { ret.other_account = ret.other_account.text; } catch (err) { }
         try { ret.this_account_insystem = ret.this_account_insystem.text; } catch (err) { }
@@ -36,7 +36,7 @@ export function listAll() {
         .populate('metadata.comments', 'text -_id') // only works if we pushed refs to children
         .populate('metadata.tags', 'text -_id') // only works if we pushed refs to children
         .populate('metadata.where', 'text -_id') // only works if we pushed refs to children
-        .exec(function(err, found: transactionsmodels.transactiondef[]) {
+        .exec(function (err, found: transactionsmodels.transactiondef[]) {
             if (err) deferred.resolve({ error: err });
             deferred.resolve(found)
         });
@@ -55,7 +55,7 @@ export function listMore(string: string) {
         .populate('metadata.comments', 'text -_id') // only works if we pushed refs to children
         .populate('metadata.tags', 'text -_id') // only works if we pushed refs to children
         .populate('metadata.where', 'text -_id') // only works if we pushed refs to children
-        .exec(function(err, found: transactionsmodels.transactiondef[]) {
+        .exec(function (err, found: transactionsmodels.transactiondef[]) {
             if (err) deferred.resolve({ error: err });
             deferred.resolve(found)
         });
@@ -75,7 +75,7 @@ export function list(string: string) {
         .populate('metadata.comments', 'text -_id') // only works if we pushed refs to children
         .populate('metadata.tags', 'text -_id') // only works if we pushed refs to children
         .populate('metadata.where', 'text -_id') // only works if we pushed refs to children
-        .exec(function(err, found: transactionsmodels.transactiondef) {
+        .exec(function (err, found: transactionsmodels.transactiondef) {
             if (err) deferred.resolve({ error: err });
             deferred.resolve(found)
         });
@@ -84,11 +84,17 @@ export function list(string: string) {
 
 export function set(string: string, object: transactionsmodels.transactiondef) {
     function update() {
-        thetransaction.update({ _id: insert._id }, insert, { upsert: true, setDefaultsOnInsert: true },
-            function(err2, found) {
-                if (err2) deferred.resolve({ error: err2 });
-                deferred.resolve(found)
-            });
+        insert.validate(function (err) {
+            if (err) {
+                deferred.resolve(err);
+                return;
+            }
+            thetransaction.findByIdAndUpdate(insert._id, insert, { upsert: true, new: true },
+                function (err2, found) {
+                    if (err2) deferred.resolve({ error: err2 });
+                    deferred.resolve(found)
+                });
+        });
     }
     var deferred = Q.defer();
     var insert = transactionmodel.set(object);
@@ -98,7 +104,7 @@ export function set(string: string, object: transactionsmodels.transactiondef) {
     }
     else {
         thetransaction.findOne(string)
-            .select('islocked').exec(function(err, found: transactionsmodels.transactiondef) {
+            .select('islocked').exec(function (err, found: transactionsmodels.transactiondef) {
                 if (err) deferred.resolve({ error: err });
                 else if (!found) { deferred.resolve({ error: "Item not exists" }) }
                 // else if ( found.islocked) { deferred.resolve({ error: "This item is locked" }) }
@@ -115,12 +121,12 @@ export function del(string: string) {
     var deferred = Q.defer();
     var thetransaction = mongoose.model('transaction', transactionmodel._schema);
     thetransaction.findOne(string)
-        .select('islocked').exec(function(err, found: transactionsmodels.transactiondef) {
+        .select('islocked').exec(function (err, found: transactionsmodels.transactiondef) {
             if (err) { deferred.resolve({ error: err }) }
             else if (!found) { deferred.resolve({ error: "Item not exists" }) }
             //  else if ( found.islocked) {deferred.resolve({ error: "This item is locked" })}
             else {
-                thetransaction.remove({ _id: found._id }, function(err2) {
+                thetransaction.remove({ _id: found._id }, function (err2) {
                     if (err2) deferred.resolve({ error: err2 });
                     deferred.resolve({ "ok": 1 })
                 });

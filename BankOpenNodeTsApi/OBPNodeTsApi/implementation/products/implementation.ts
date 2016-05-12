@@ -1,80 +1,61 @@
 ﻿//product implementation
 import express = require('express');
 import productsservice = require('../../services/products/service');
+import commonfunct = require('../../implementation/commonfunct');
 
-export function list(req: express.Request, res: express.Response, next) {
-    productsservice.listAll().then(
-        function (resp) {
-            res.json(
-                { products: resp }
-            )
-        }
+export function listbid(req: express.Request, res: express.Response, next) {
+    var question: any = {};
+    question.bank_id = req.params.bid;
+    productsservice.listBid(question).then(
+        function (resp) { res.json({ products: resp }) }
+    );
+};
+export function listid(req: express.Request, res: express.Response, next) {
+    var question: any = {};
+    question.bank_id = req.params.bid;
+    question._id = req.params.id;
+    productsservice.listId(question).then(
+        function (resp) { res.json(resp) }
     );
 };
 export function listmore(req: express.Request, res: express.Response, next) {
     var question: any = {};
-    // like example new RegExp(req.body.payload.name, "i") 
-    if (req.body.payload.name) { question.name = new RegExp(req.body.payload.name, "i"); }
-    if (req.body.payload.family) { question.family = new RegExp(req.body.payload.family, "i"); }
-    if (req.body.payload.code) { question._id = req.body.payload.code; }
-    if (req.body.payload.category) { question.category = req.body.payload.category; }
+    // like example commonfunct.customcontainsregexp(req.body.name) 
+    if (req.body.name) { question.name = commonfunct.customcontainsregexp(req.body.name); }
+    if (req.body.family) { question.family = commonfunct.customcontainsregexp(req.body.family); }
+    if (req.params.id) { question._id = req.params.id; }
+    if (req.params.bid) { question.bank_id = req.params.bid; }
+    if (req.body.category) { question.category = req.body.category; }
     if (JSON.stringify(question) === "{}") {
-        res.json({ reqwas: req.body.payload, error: "No input data or wrong input data" })
+        res.json({ reqwas: req.body, error: "No input data or wrong input data" })
     }
     productsservice.listMore(question).then(
-        function (resp) {
-            res.json(
-                { products: resp }
-            )
-        }
-    );
-};
-export function get(req: express.Request, res: express.Response, next) {
-    var question: any = {};
-    // like example new RegExp(req.body.payload.name, "i") 
-    if (req.body.payload.name) { question.name = new RegExp(req.body.payload.name, "i"); }
-    if (req.body.payload.family) { question.family = new RegExp(req.body.payload.family, "i"); }
-    if (req.body.payload.code) { question._id = req.body.payload.code; }
-    if (req.body.payload.category) { question.category = req.body.payload.category; }
-    if (JSON.stringify(question) === "{}") {
-        res.json({ reqwas: req.body.payload, error: "No input data or wrong input data" })
-    }
-    productsservice.list(question).then(
-        function (resp) {
-            res.json(resp )
-        }
+        function (resp) { res.json({ products: resp }) }
     );
 };
 export function set(req: express.Request, res: express.Response, next) {
     var question: any = {};
-    // like example new RegExp(req.body.payload.name, "i") 
-    if (req.body.payload.code) { question._id = req.body.payload.code; }
-    if (!req.body.payload.insert) {
-        res.json({ reqwas: req.body.payload, error: "No insert input" })
+    var input = req.body;
+    if (req.params.id) { question._id = req.params.id; }
+    input.bank = req.params.bid;
+    if (commonfunct.bankpermissions(req).can_edit_customers) {
+        productsservice.set(question, input).then(
+            function (resp) { res.json({ products: resp }) }
+        );
     }
-    //if (JSON.stringify(question) === "{}") {
-    //    res.json({ reqwas: req.body.payload, error: "No input data or wrong input data" })
-    //}
-    productsservice.set(question, req.body.payload.insert).then(
-        function (resp) {
-            res.json(
-                { payload: resp }
-            )
-        }
-    );
+    else {
+        res.json({ reqwas: req.body, error: "User has no can_edit_products" })
+    }
 };
 export function del(req: express.Request, res: express.Response, next) {
     var question: any = {};
-    // like example new RegExp(req.body.payload.name, "i") 
-    if (req.body.payload.code) { question._id = req.body.payload.code; }
-    if (JSON.stringify(question) === "{}") {
-        res.json({ reqwas: req.body.payload, error: "No input data or wrong input data" })
+    if (req.params.id) { question._id = req.params.id; }
+    if (commonfunct.bankpermissions(req).can_edit_customers) {
+        productsservice.del(question).then(
+            function (resp) { res.json({ products: resp }) }
+        );
     }
-    productsservice.del(question).then(
-        function (resp) {
-            res.json(
-                { payload: resp }
-            )
-        }
-    );
+    else {
+        res.json({ reqwas: req.body, error: "User has no can_edit_products" })
+    }
 };

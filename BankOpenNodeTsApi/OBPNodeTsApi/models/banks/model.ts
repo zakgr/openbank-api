@@ -5,8 +5,8 @@ export interface bankdef extends mongoose.Document {
     short_name: string;
     //Bank Name
     full_name: string;
-    logo?:string;
-    website?:string;
+    logo?: string;
+    website?: string;
     islocked?: any;
     updated?: any;
 
@@ -15,23 +15,23 @@ export interface bankdef extends mongoose.Document {
 export class bank {
     _schema: mongoose.Schema = new mongoose.Schema({
         short_name: {
-            type: String, required: true, index: { unique: true }
+            type: String, required: true, trim: true, index: { unique: true }
         },
         full_name: {
-            type: String, required: true
+            type: String, required: true, trim: true
         },
         logo: {
             type: Boolean
         },
         website: {
-            type: String
+            type: String, trim: true
         },
         islocked: {
             //P.findOne().select('islocked').exec(callback); to selected 
-            type: Boolean,select:false
+            type: Boolean, select: false
         },
         updated: {
-            type: Date,select:false
+            type: Date, select: false
         }
     })
         .pre('save', function (next) {

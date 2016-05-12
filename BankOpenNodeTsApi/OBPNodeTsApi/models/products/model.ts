@@ -18,27 +18,24 @@ export class product {
             type: String, required: true, index: { unique: true }
         },
         category: {
-            type: String, required: true
+            type: String, trim: true, required: true
         },
         family: {
-            type: String
+            type: String, trim: true
         },
         super_family: {
-            type: String
+            type: String, trim: true
         },
         more_info_url: {
-            type: String
+            type: String, trim: true
         },
-        meta:  {type:[{ type: mongoose.Schema.Types.ObjectId, ref: 'metadata' }],select:false},
-        bank_id: { type: mongoose.Schema.Types.ObjectId, ref: 'bank' },
-        islocked: {
-            //P.findOne().select('islocked').exec(callback); to selected 
-            type: Boolean,select:false
-        },
-        updated: { type: Date,select:false }
+        meta: { type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'metadata' }], select: false },
+        bank_id: { type: mongoose.Schema.Types.ObjectId, ref: 'bank', select: false },
+        islocked: { type: Boolean, select: false },
+        updated: { type: Date, select: false }
     }
-        )
-        .pre('save', function(next) {
+    )
+        .pre('save', function (next) {
             this.updated = new Date();
             next();
         });

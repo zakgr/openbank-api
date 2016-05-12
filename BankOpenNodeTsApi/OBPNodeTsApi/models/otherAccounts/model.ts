@@ -36,13 +36,13 @@ export interface OtherAccountMetadata {
 export class otherAccount {
     _schema: mongoose.Schema = new mongoose.Schema({
         holder: {
-            name: String,
-            is_alias: Boolean
+            name:{ type: String, trim: true },
+                is_alias: Boolean
         },
-        number: String,
-        kind: String,
-        IBAN: { type: String, required: true, index: { unique: true } },
-        swift_bic: String,
+        number: { type: String, trim: true },
+        kind: { type: String, trim: true },
+        IBAN: { type: String, required: true, trim: true, index: { unique: true } },
+        swift_bic: { type: String, trim: true },
         bank: { type: mongoose.Schema.Types.ObjectId, ref: 'bank' },
         metadata: {
             public_alias: { type: mongoose.Schema.Types.ObjectId, ref: 'metadata' },
@@ -56,13 +56,13 @@ export class otherAccount {
         },
         islocked: {
             //P.findOne().select('islocked').exec(callback); to selected 
-            type: Boolean,select:false
+            type: Boolean, select: false
         },
-        updated: { type: Date,select:false }
+        updated: { type: Date, select: false }
 
     }
     )
-        .pre('save', function(next) {
+        .pre('save', function (next) {
             this.updated = new Date();
             next();
         })

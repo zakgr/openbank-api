@@ -1,15 +1,16 @@
 ﻿{
   // Customer module configs
   "maincfg": {
-    "runningport": 3005
+    "runningport": 3005,
+    "httpsrunningport": 443
   },
   "dbConfigs": {
     "mongodb": {
-      "name": "27017",
+      "name": "bankapi",
       "type": "mongodb",
       "host": "localhost",
-      "port": "27017",
-      "connectionstring": "mongodb://localhost:27017"
+      "port": "27017"
+    //    ,  "connectionstring": "mongodb://localhost:27017/bankapi"
     }
   },
   "authConfigs": {
@@ -20,13 +21,5 @@
       "clientSecret": "ssh-secret",
       "callbackURL": "/auth/login"
     }
-  },
-  "branchesservice": {
-    "url": "https://www.nbg.gr/branchibankpass/equeueing/api/eQueueing/areaBranches",
-    "bankcode": 111
-  },
-  "atmsservice": {
-    "url": "https://www.nbg.gr/branchibankpass/equeueing/api/eQueueing/areaAtms",
-    "bankcode": 111
   }
 }

@@ -1,91 +1,60 @@
 ﻿// atms implementation
 import express = require('express');
 import atmsservice = require('../../services/atms/service');
+import commonfunct = require('../../implementation/commonfunct');
 
-//connect to legacy public services example
-export function list2(req: express.Request, res: express.Response, next) {
-    var reqbody;
-    if (req.method == 'GET') {
-        reqbody = {
-            payload: {}
-        };
-    }
-    else {
-        reqbody = req.body;
-    }
-    if (req.body.payload instanceof Array)
-    { res.status(500).send('Error!payload cannot be an array'); res.json('Error!payload cannot be an array'); }
-    else {
-        atmsservice.listAll2(reqbody).then(
-            function (resp) {
-                res.json(resp);
-            }
-        );
-    }
+export function listbid(req: express.Request, res: express.Response, next) {
+    var question: any = {};
+    question.bank_id = req.params.bid;
+    atmsservice.listBid(question).then(
+        function (resp) { res.json({ atms: resp }) }
+    );
 };
-
-
-export function list(req: express.Request, res: express.Response, next) {
-    atmsservice.listAll().then(
-        function (resp) {
-            res.json(
-                { atms: resp }
-            )
-        }
+export function listid(req: express.Request, res: express.Response, next) {
+    var question: any = {};
+    question.bank_id = req.params.bid;
+    question._id = req.params.id;
+    atmsservice.listId(question).then(
+        function (resp) { res.json(resp) }
     );
 };
 export function listmore(req: express.Request, res: express.Response, next) {
     var question: any = {};
-    // like example new RegExp(req.body.payload.name, "i") 
-    if (req.body.payload.city) { question.city = new RegExp(req.body.payload.city, "i"); }
-    if (req.body.payload.name) { question.name = new RegExp(req.body.payload.name, "i"); }
-    if (req.body.payload.id) { question._id = req.body.payload.id; }
+    // like example commonfunct.customcontainsregexp(req.body.name) 
+    if (req.body.city) { question.city = commonfunct.customcontainsregexp(req.body.city); }
+    if (req.body.name) { question.name = commonfunct.customcontainsregexp(req.body.name); }
+    if (req.params.id) { question._id = req.params.id; }
+    if (req.params.bid) { question.bank_id = req.params.bid; }
     if (JSON.stringify(question) === "{}") {
-        res.json({ reqwas: req.body.payload, error: "No input data or wrong input data" })
+        res.json({ reqwas: req.body, error: "No input data or wrong input data" })
     }
     atmsservice.listMore(question).then(
-        function (resp) {  res.json( { atms: resp  
-            })}
-    );
-};
-export function get(req: express.Request, res: express.Response, next) {
-    var question: any = {};
-    // like example new RegExp(req.body.payload.name, "i") 
-    if (req.body.payload.city) { question.city = new RegExp(req.body.payload.city, "i"); }
-    if (req.body.payload.name) { question.name = new RegExp(req.body.payload.name, "i"); }
-    if (req.body.payload.id) { question._id = req.body.payload.id; }
-    if (JSON.stringify(question) === "{}") {
-        res.json({ reqwas: req.body.payload, error: "No input data or wrong input data" })
-    }
-    atmsservice.list(question).then(
-        function (resp) {  res.json(  resp  
-            )}
+        function (resp) { res.json({ atms: resp }) }
     );
 };
 export function set(req: express.Request, res: express.Response, next) {
     var question: any = {};
-    
-    if (req.body.payload.id) { question._id = req.body.payload.id; }
-    if (!req.body.payload.insert) {
-        res.json({ reqwas: req.body.payload, error: "No insert input" })
+    var input = req.body;
+    if (req.params.id) { question._id = req.params.id; }
+    input.bank_id = req.params.bid;
+    if (commonfunct.bankpermissions(req).can_edit_atms) {
+        atmsservice.set(question, input).then(
+            function (resp) { res.json({ atms: resp }) }
+        );
     }
-    //if (JSON.stringify(question) === "{}") {
-    //    res.json({ reqwas: req.body.payload, error: "No input data or wrong input data" })
-    //}
-    atmsservice.set(question, req.body.payload.insert).then(
-        function (resp) {  res.json( { atms: resp  
-            })}
-    );
+    else {
+        res.json({ reqwas: req.body, error: "User has no can_edit_atms" })
+    }
 };
 export function del(req: express.Request, res: express.Response, next) {
     var question: any = {};
-    // like example new RegExp(req.body.payload.name, "i") 
-    if (req.body.payload.id) { question._id = req.body.payload.id; }
-    if (JSON.stringify(question) === "{}") {
-        res.json({ reqwas: req.body.payload, error: "No input data or wrong input data" })
+    if (req.params.id) { question._id = req.params.id; }
+    if (commonfunct.bankpermissions(req).can_edit_atms) {
+        atmsservice.del(question).then(
+            function (resp) { res.json({ atms: resp }) }
+        );
     }
-    atmsservice.del(question).then(
-        function (resp) {  res.json( { atms: resp  
-            })}
-    );
+    else {
+        res.json({ reqwas: req.body, error: "User has no can_edit_atms" })
+    }
 };

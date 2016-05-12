@@ -20,9 +20,47 @@ var options = {
     cert: fs.readFileSync('keys/cert.pem')
 };
 
+// for login with passport
+import usersservice = require('./services/users/service');
+import usersmodels = require('./models/users/model');
+//import requestIp = require('request-ip');
+//passport setup
+export import passport = require('passport');
+var CustomStrategy = require('passport-custom');
+passport.use(new CustomStrategy(
+    function (req, callback) {
+        var question: any = {};
+        if (req.header('Auth-Provider-Name')) { question.auth_provider_name = req.header('Auth-Provider-Name'); }
+        else { callback(null); }
+        if (req.header('Auth-ID')) { question.auth_id = req.header('Auth-ID'); }
+        else { callback(null); }
+        if (JSON.stringify(question) === "{}") {
+            callback(null);
+        }
+        usersservice.listMore(question).then(
+            function (resp: any) {
+                if (resp) {
+                    callback(null, JSON.parse(JSON.stringify(resp)))
+                }
+                else { callback(null); }
+            }
+        );
+    }
+));
+passport.serializeUser(function (user, done) {
+    done(null, user);
+});
+passport.deserializeUser(function (user, done) {
+    done(null, user);
+});
  
 //connect database
-mongoose.connect(config.get<string>('dbConfigs.mongodb.connectionstring'));
+mongoose.connect(
+    config.get<string>('dbConfigs.mongodb.type') + "://" +
+    config.get<string>('dbConfigs.mongodb.host') + ":" +
+    config.get<string>('dbConfigs.mongodb.port') + "/" +
+    config.get<string>('dbConfigs.mongodb.name')
+);
 
 // all environments
 var app = express();
@@ -31,13 +69,14 @@ var app = express();
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, fakelogin");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Track-ID,Auth-Provider-Name,Auth-ID");
     //res.header("Access-Control-Allow-Methods", "*")
     //res.header("Access-Control-Allow-Headers", "*")
     next();
 });
 
 app.set('port', process.env.PORT || config.get<number>('maincfg.runningport'));
+//app.set('httpsport',  config.get<number>('maincfg.httpsrunningport'));
 app.engine('html', require('ejs').renderFile);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
@@ -51,38 +90,23 @@ app.use(bodyParser.json())
 app.use(passport.initialize());
 app.use(passport.session());
 
-//swagger middleware
-middleware(__dirname + '/public/api.json', app, function (err, middleware) {
-    // Add all the Swagger Express Middleware, or just the ones you need.
-    // NOTE: Some of these accept optional options (omitted here for brevity)
-    app.use(
-        middleware.metadata(),
-        //middleware.CORS(),
-        middleware.files()
-        //middleware.parseRequest(),
-        //middleware.validateRequest(),
-        //middleware.mock()
-    );
-});
-
 //filter middlware for NBG ID AND PAYLOAD
 app.use(function (req: express.Request, res, next) {
-   // console.log('req.method', req.method);
+    // console.log('req.method', req.method);
     if (req.method == 'POST'
-    || req.method == 'PUT'
-    || req.method == 'DELETE'
+        || req.method == 'PUT'
+        || req.method == 'DELETE'
     ) {
-        if (!req.body.nbgtrackid)
-        { res.status(500).send('Error!no nbgtrackid'); next('Error!no nbgtrackid'); }
-        else if (!validator.isUUID(req.body.nbgtrackid) && !validator.isMongoId(req.body.nbgtrackid))
-        { res.status(500).send('Error!nbgtrackid must be a valid UUID'); next('Error!nbgtrackid must be a valid UUID'); }
-        else if (!req.body.payload)
-        { res.status(500).send('Error!no payload'); next('Error!no payload'); }
-        else if (typeof req.body.payload == 'string')
-        { res.status(500).send('Error!payload cannot be string'); next('Error!payload cannot be string'); }
-    } 
+        if (!req.header('Track-ID'))
+        { res.status(500).send('Error!no Track-ID'); next('Error!no Track-ID'); }
+        else if (!validator.isUUID(req.header('Track-ID')) && !validator.isMongoId(req.header('Track-ID')))
+        { res.status(500).send('Error!Track-ID must be a valid UUID'); next('Error!Track-ID must be a valid UUID'); }
+    }
+    console.log(req.ip);
+    //if(res.status(404)){res.status(404).send('Error Request Not Found');}
     next();
 });
+
 //Route start
 app.use('/', require('./routes/mainroutes'));
 app.use('/api', require('./routes/apiroutes'));
@@ -99,8 +123,8 @@ http.createServer(app).listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));
 });
 
-https.createServer(options, app).listen(443, function () {
-    console.log('Express server http listening on port 443');
-});
+//https.createServer(options, app).listen(app.get('httpsport'), function () {
+//    console.log('Express server http listening on port  + app.get('httpsport'));
+//});
 
  
