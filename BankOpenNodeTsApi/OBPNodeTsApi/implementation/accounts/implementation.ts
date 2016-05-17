@@ -9,7 +9,7 @@ export function listbid(req: express.Request, res: express.Response, next) {
     accountsservice.listBid(question).then(
         function (resp) { res.json({ accounts: resp }) }
     );
-};
+}; 
 export function listid(req: express.Request, res: express.Response, next) {
     var question: any = {};
     question.bank_id = req.params.bid;
