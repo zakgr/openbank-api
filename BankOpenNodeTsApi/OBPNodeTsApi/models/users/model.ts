@@ -54,18 +54,20 @@ export class user {
         },
         providers: [
             {
+
                 auth_provider_name: {
                     type: String, required: true, trim: true
                 },
                 auth_id: {
                     type: String, required: true, trim: true
                 }
+
             }
         ],
         bank_permissions: [
             {
                 bank_id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'bank' },
-                customer_id: { type: mongoose.Schema.Types.ObjectId,  ref: 'customer' },
+                customer_id: { type: mongoose.Schema.Types.ObjectId, ref: 'customer' },
                 can_edit_branches: {
                     type: Boolean
                 },
@@ -102,7 +104,7 @@ export class user {
             type: Date
         }
     })
-        .pre('save', function(next) {
+        .pre('save', function (next) {
             this.updated = new Date();
             next();
         });

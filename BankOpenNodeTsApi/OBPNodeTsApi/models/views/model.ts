@@ -1,7 +1,7 @@
 import mongoose = require('mongoose');
 
 export interface viewdef extends mongoose.Document {
-    account_id?: any;
+    user_id?: any;
     bank_id?: any;
     short_name?: string;
     description?: string;
@@ -10,7 +10,7 @@ export interface viewdef extends mongoose.Document {
     is_public?: boolean;
 
     //"public/private/none"
-    which_alias_to_use?: string;
+    which_alias_to_use: string;
 
     hide_metadata_if_alias_used?: boolean;
     can_see_transaction_this_bank_account?: boolean;
@@ -80,12 +80,12 @@ export interface viewdef extends mongoose.Document {
 
 export class view {
     _schema: mongoose.Schema = new mongoose.Schema({
-        account_id: { type: mongoose.Schema.Types.ObjectId, ref: 'account', select: false },
+        user_id: { type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }], select: false },
         bank_id: { type: mongoose.Schema.Types.ObjectId, ref: 'bank', select: false },
-        short_name: { type: String, trim: true },
+        name: { type: String, trim: true },
         description: { type: String, trim: true },
         is_public: { type: Boolean, default: false },
-        which_alias_to_use: { type: String, trim: true, default:'none', enum:['public','private','none']},
+        which_alias_to_use: { type: String, trim: true, require: true, enum: ['public', 'private', 'none'] },
         hide_metadata_if_alias_used: { type: Boolean, default: false },
         can_see_transaction_this_bank_account: { type: Boolean, default: false },
         can_see_transaction_other_bank_account: { type: Boolean, default: false },
@@ -162,6 +162,15 @@ export class view {
         this.current = mongoose.model<viewdef>('view', this._schema);
     }
     set(item: viewdef) {
+        return new this.current(item);
+    }
+    empty() {
+       var item: viewdef = null;
+       // {
+            
+            
+            
+    //    }
         return new this.current(item);
     }
 }

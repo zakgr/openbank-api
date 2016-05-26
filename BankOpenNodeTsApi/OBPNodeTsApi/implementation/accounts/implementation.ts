@@ -2,50 +2,128 @@
 import express = require('express');
 import accountsservice = require('../../services/accounts/service');
 import commonfunct = require('../../implementation/commonfunct');
+var name = { accounts: null };
 
 export function listbid(req: express.Request, res: express.Response, next) {
-    var question: any = {};
-    question.bank_id = req.params.bid;
+    var check = { field: ['customer_id'], params: [req, res, next] };
+    if (commonfunct.check(check)) {
+        var question: any = [{}];
+        if (req.params.bid) {
+            question[0].bank_id = req.params.bid;
+            question[0].callfor = "bank";
+            question[0].customer_id = commonfunct.bankpermissions(req).customer_id.toString();
+        }
+        else {
+            question = commonfunct.bankscustomers(req);
+            question.map(function(item) { item.callfor = "bankall"; })
+        }
+        accountsservice.listBid(question).then(function(resp) {
+            commonfunct.response(resp, name, res, next)
+        })
+    }
+};
+export function listbidprivate(req: express.Request, res: express.Response, next) {
+    var check = { field: ['customer_id'], params: [req, res, next] };
+    if (commonfunct.check(check)) {
+        var question: any = [{}];
+        if (req.params.bid) {
+            question[0].bank_id = req.params.bid;
+            question[0].customer_id = commonfunct.bankpermissions(req).customer_id.toString();
+            question[0].callfor = "private";
+        }
+        else {
+            question = commonfunct.bankscustomers(req);
+            question.map(function(item) { item.callfor = "private"; })
+        }
+        accountsservice.listBid(question).then(
+            function(resp) {
+                commonfunct.response(resp, name, res, next)
+            }
+        );
+    }
+};
+export function listbidpublic(req: express.Request, res: express.Response, next) {
+    var question: any = [{}];
+    if (req.params.bid) {
+        question[0].bank_id = req.params.bid;
+        question[0].callfor = "public";
+    }
+    else {
+        question[0].callfor = "publicall";
+    }
     accountsservice.listBid(question).then(
-        function (resp) { res.json({ accounts: resp }) }
+        function(resp) {
+            commonfunct.response(resp, name, res, next)
+        }
     );
-}; 
-export function listid(req: express.Request, res: express.Response, next) {
+};
+export function listidview(req: express.Request, res: express.Response, next) {
     var question: any = {};
     question.bank_id = req.params.bid;
     question._id = req.params.id;
-    accountsservice.listId(question).then(
-        function (resp) { res.json(resp) }
-    );
+    question.rq = { view: { id: req.params.vid }, owner: commonfunct.bankpermissions(req).customer_id.toString() }
+    accountsservice.listIdView(question).then(function(resp) {
+        if (req.params.scope && req.params.scope == 'views' && resp['data'] && resp['data'].views_available) {
+            resp['data'] = resp['data'].views_available;
+            commonfunct.response(resp, { views: null }, res, next)
+        }
+        else {
+            commonfunct.response(resp, name, res, next)
+        }
+    });
+};
+export function listidviewpublic(req: express.Request, res: express.Response, next) {
+    var question: any = {};
+    question.bank_id = req.params.bid;
+    question._id = req.params.id;
+    question.is_public = true;
+    question.rq = { view: { id: req.params.vid, is_public: true } };
+    accountsservice.listIdView(question).then(function(resp) {
+        if (req.params.scope && req.params.scope == 'views' && resp['data'] && resp['data'].views_available) {
+            resp['data'] = resp['data'].views_available;
+            commonfunct.response(resp, { views: null }, res, next)
+        }
+        else {
+            commonfunct.response(resp, name, res, next)
+        }
+    });
 };
 export function listmore(req: express.Request, res: express.Response, next) {
-    var question: any = {};
-    // like example new RegExp(req.body.name, "i") 
-    if (req.body.label) { question.label = commonfunct.customcontainsregexp(req.body.label); }
-    if (req.body.type_id) { question.type = req.body.type_id; }
-    if (req.body.IBAN) { question.IBAN = req.body.IBAN; }
-    if (req.params.id) { question._id = req.params.id; }
-    if (req.params.bid) { question.bank_id = req.params.bid; }
-    if (JSON.stringify(question) === "{}") {
-        res.json({ reqwas: req.body, error: "No input data or wrong input data" })
+    //params by default is those three paraments 
+    var check = { field: ['data'], params: [req, res, next] };
+    if (commonfunct.check(check)) {
+        var question: any = {};
+        if (req.body.label) { question.label = commonfunct.customcontainsregexp(req.body.label); }
+        if (req.body.type_id) { question.type = req.body.type_id; }
+        if (req.body.IBAN) { question.IBAN = req.body.IBAN; }
+        if (req.params.id) { question._id = req.params.id; }
+        if (req.params.bid) { question.bank_id = req.params.bid; }
+        accountsservice.listMore(question).then(
+            function(resp) {
+                commonfunct.response(resp, name, res, next)
+            }
+        );
     }
-    accountsservice.listMore(question).then(
-        function (resp) { res.json({ accounts: resp }) }
-    );
 };
+
+//todo auth
 export function set(req: express.Request, res: express.Response, next) {
     var question: any = {};
     var input = req.body;
     if (req.params.id) { question._id = req.params.id; }
     input.bank = req.params.bid;
     accountsservice.set(question, input).then(
-        function (resp) { res.json(resp) }
+        function(resp) {
+            commonfunct.response(resp, name, res, next)
+        }
     );
 };
 export function del(req: express.Request, res: express.Response, next) {
     var question: any = {};
     if (req.params.id) { question._id = req.params.id; }
     accountsservice.del(question).then(
-        function (resp) { res.json(resp) }
+        function(resp) {
+            commonfunct.response(resp, name, res, next)
+        }
     );
 };

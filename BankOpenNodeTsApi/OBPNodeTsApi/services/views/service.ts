@@ -2,69 +2,80 @@
 import Q = require('q');
 import mongoose = require('mongoose');
 import viewsmodels = require('../../models/views/model');
-import commonfunct = require('../../services/commonfunct');
+import commonservice = require('../../services/commonservice');
 var viewmodel = new viewsmodels.view();
 
 //Transform
-var viewschema = viewmodel._schema;
-viewschema.set('toJSON', {
-    transform: function (doc, ret, options) {
+export function transform(schema) {
+    function change(ret) {
         //     try { ret.bank_id = ret.bank_id.text; } catch (err) { }
         ret.id = ret._id;
         delete ret._id;
         delete ret.__v;
     }
-});
+    if (schema) {
+        if (schema.constructor === Object) { change(schema); }
+        else { schema.map(function (ret) { change(ret); }); }
+    }
+    return schema;
+};
 
 export function listBid(string: string) {
     var deferred = Q.defer();
-    var theview = mongoose.model('view', viewschema);
-    theview.find(string)
+    var theview = mongoose.model('view', viewmodel._schema);
+    theview.find(string).lean()
         .exec(function (err, found: viewsmodels.viewdef[]) {
-            if (err) deferred.resolve({ error: err });
-            deferred.resolve(found)
+            found = transform(found);
+            commonservice.answer(err, found, deferred);
         });
     return deferred.promise;
 }
 
 export function listId(string: string) {
     var deferred = Q.defer();
-    var theview = mongoose.model('view', viewschema);
-    theview.findOne(string)
+    var theview = mongoose.model('view', viewmodel._schema);
+    theview.findOne(string).lean()
         .exec(function (err, found: viewsmodels.viewdef) {
-            if (err) deferred.resolve({ error: err });
-            deferred.resolve(found)
+            found = transform(found);
+            commonservice.answer(err, found, deferred);
         });
     return deferred.promise;
 }
 
 export function listMore(string: string) {
     var deferred = Q.defer();
-    var theview = mongoose.model('view', viewschema);
-    theview.find(string)
+    var theview = mongoose.model('view', viewmodel._schema);
+    theview.find(string).lean()
         .exec(function (err, found: viewsmodels.viewdef[]) {
-            if (err) deferred.resolve({ error: err });
-            deferred.resolve(found)
+            found = transform(found);
+            commonservice.answer(err, found, deferred);
         });
     return deferred.promise;
 }
 
 export function set(string: string, object: viewsmodels.viewdef) {
     var deferred = Q.defer();
+    try {
+        for (var items of object['allowed_actions']) {
+            object[items] = true;
+        }
+        delete object['allowed_actions'];
+    }
+    catch (err) { }
     var insert = viewmodel.set(object);
     var theview = mongoose.model('view', viewmodel._schema);
+
     if (JSON.stringify(string) === "{}") {
-        commonfunct.update(insert,theview,deferred);
+        commonservice.update(insert, theview, deferred);
     }
     else {
         theview.findOne(string)
-            .select('islocked').exec(function (err, found: viewsmodels.viewdef) {
-                if (err) deferred.resolve({ error: err });
-                else if (!found) { deferred.resolve({ error: "Item not exists" }) }
-                // else if ( found.islocked) { deferred.resolve({ error: "This item is locked" }) }
+            .exec(function (err, found: viewsmodels.viewdef) {
+                if (err) deferred.resolve({ error: err, status: 500 });
+                else if (!found) { deferred.resolve({ error: "Item not exists", status: 409 }) }
                 else {
                     if (found && found._id) { insert._id = found._id; }
-                    commonfunct.update(insert,theview,deferred);
+                    commonservice.update(insert, theview, deferred);
                 }
             });
     }
@@ -74,17 +85,12 @@ export function set(string: string, object: viewsmodels.viewdef) {
 export function del(string: string) {
     var deferred = Q.defer();
     var theview = mongoose.model('view', viewmodel._schema);
-    theview.findOne(string)
-        .select('islocked').exec(function (err, found: viewsmodels.viewdef) {
-            if (err) { deferred.resolve({ error: err }) }
-            else if (!found) { deferred.resolve({ error: "Item not exists" }) }
-            //  else if ( found.islocked) {deferred.resolve({ error: "This item is locked" })}
-            else {
-                theview.remove({ _id: found._id }, function (err2) {
-                    if (err2) deferred.resolve({ error: err2 });
-                    deferred.resolve({ "ok": 1 })
-                });
-            }
+    theview.findOneAndRemove(string)
+        .exec(function (err, found: viewsmodels.viewdef) {
+            if (err) { deferred.resolve({ error: err, status: 500 }) }
+            else if (!found) { deferred.resolve({ error: "Item not exists", status: 409 }) }
+            else { deferred.resolve({ data: { "ok": 1 }, status: 200 }) }
+
         });
 
     return deferred.promise;

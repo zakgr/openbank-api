@@ -34,8 +34,15 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="implementation\commonfunct.js.map" />
+    <Content Include="implementation\messages\implementation.js.map" />
+    <Content Include="implementation\users\implementation.js.map" />
+    <Content Include="models\messages\model.js.map" />
     <Content Include="public\api.json" />
+    <Content Include="routes\messages\routes.js.map" />
     <Content Include="routes\users\routes.js.map" />
+    <Content Include="services\commonservice.js.map" />
+    <Content Include="services\messages\service.js.map" />
     <Content Include="views\register.html" />
     <TypeScriptCompile Include="app.ts" />
     <TypeScriptCompile Include="implementation\accounts\implementation.ts" />
@@ -47,6 +54,7 @@
       <TestFramework>ExportRunner</TestFramework>
     </TypeScriptCompile>
     <TypeScriptCompile Include="implementation\customers\implementation.ts" />
+    <TypeScriptCompile Include="implementation\messages\implementation.ts" />
     <TypeScriptCompile Include="implementation\metadata\implementation.ts" />
     <TypeScriptCompile Include="implementation\otherAccounts\implementation.ts" />
     <TypeScriptCompile Include="implementation\products\implementation.ts" />
@@ -60,6 +68,7 @@
     <TypeScriptCompile Include="models\branches\model.ts" />
     <TypeScriptCompile Include="models\commoninterfaces.ts" />
     <TypeScriptCompile Include="models\customers\model.ts" />
+    <TypeScriptCompile Include="models\messages\model.ts" />
     <TypeScriptCompile Include="models\metadata\model.ts" />
     <TypeScriptCompile Include="models\otherAccounts\model.ts" />
     <TypeScriptCompile Include="models\products\model.ts" />
@@ -126,7 +135,6 @@
     <Content Include="tsd.json" />
     <Content Include="views\licence.html" />
     <Content Include="views\index.html" />
-    <TypeScriptCompile Include="mongoinputcustomers.ts" />
     <TypeScriptCompile Include="routes\accounts\routes.ts" />
     <TypeScriptCompile Include="routes\apiroutes.ts" />
     <TypeScriptCompile Include="routes\atms\routes.ts" />
@@ -135,6 +143,7 @@
     <TypeScriptCompile Include="routes\branches\routes.ts" />
     <TypeScriptCompile Include="routes\customers\routes.ts" />
     <TypeScriptCompile Include="routes\mainroutes.ts" />
+    <TypeScriptCompile Include="routes\messages\routes.ts" />
     <TypeScriptCompile Include="routes\metadata\routes.ts" />
     <TypeScriptCompile Include="routes\otherAccounts\routes.ts" />
     <TypeScriptCompile Include="routes\products\routes.ts" />
@@ -145,7 +154,9 @@
     <TypeScriptCompile Include="services\atms\service.ts" />
     <TypeScriptCompile Include="services\banks\service.ts" />
     <TypeScriptCompile Include="services\branches\service.ts" />
+    <TypeScriptCompile Include="services\commonservice.ts" />
     <TypeScriptCompile Include="services\customers\service.ts" />
+    <TypeScriptCompile Include="services\messages\service.ts" />
     <TypeScriptCompile Include="services\metadata\service.ts" />
     <TypeScriptCompile Include="services\otherAccounts\service.ts" />
     <TypeScriptCompile Include="services\products\service.ts" />
@@ -199,6 +210,7 @@
     <Folder Include="implementation\banks\" />
     <Folder Include="implementation\branches\" />
     <Folder Include="implementation\customers\" />
+    <Folder Include="implementation\messages\" />
     <Folder Include="implementation\metadata\" />
     <Folder Include="implementation\otherAccounts\" />
     <Folder Include="implementation\products\" />
@@ -212,6 +224,7 @@
     <Folder Include="models\banks\" />
     <Folder Include="models\branches\" />
     <Folder Include="models\customers\" />
+    <Folder Include="models\messages\" />
     <Folder Include="models\metadata\" />
     <Folder Include="models\otherAccounts\" />
     <Folder Include="models\products\" />
@@ -229,6 +242,7 @@
     <Folder Include="routes\banks\" />
     <Folder Include="routes\branches\" />
     <Folder Include="routes\customers\" />
+    <Folder Include="routes\messages\" />
     <Folder Include="routes\metadata\" />
     <Folder Include="routes\users\" />
     <Folder Include="routes\otherAccounts\" />
@@ -241,6 +255,7 @@
     <Folder Include="services\banks\" />
     <Folder Include="services\branches\" />
     <Folder Include="services\customers\" />
+    <Folder Include="services\messages\" />
     <Folder Include="services\metadata\" />
     <Folder Include="services\otherAccounts\" />
     <Folder Include="services\products\" />
@@ -275,11 +290,14 @@
     <Compile Include="implementation\atms\implementation.js" />
     <Compile Include="implementation\banks\implementation.js" />
     <Compile Include="implementation\branches\implementation.js" />
+    <Compile Include="implementation\commonfunct.js" />
     <Compile Include="implementation\customers\implementation.js" />
+    <Compile Include="implementation\messages\implementation.js" />
     <Compile Include="implementation\metadata\implementation.js" />
     <Compile Include="implementation\otherAccounts\implementation.js" />
     <Compile Include="implementation\products\implementation.js" />
     <Compile Include="implementation\transactions\implementation.js" />
+    <Compile Include="implementation\users\implementation.js" />
     <Compile Include="implementation\views\implementation.js" />
     <Compile Include="isAuthenticated.js" />
     <Compile Include="models\accounts\model.js" />
@@ -288,6 +306,7 @@
     <Compile Include="models\branches\model.js" />
     <Compile Include="models\commoninterfaces.js" />
     <Compile Include="models\customers\model.js" />
+    <Compile Include="models\messages\model.js" />
     <Compile Include="models\metadata\model.js" />
     <Compile Include="models\otherAccounts\model.js" />
     <Compile Include="models\products\model.js" />
@@ -302,6 +321,7 @@
     <Compile Include="routes\branches\routes.js" />
     <Compile Include="routes\customers\routes.js" />
     <Compile Include="routes\mainroutes.js" />
+    <Compile Include="routes\messages\routes.js" />
     <Compile Include="routes\metadata\routes.js" />
     <Compile Include="routes\otherAccounts\routes.js" />
     <Compile Include="routes\products\routes.js" />
@@ -312,7 +332,9 @@
     <Compile Include="services\atms\service.js" />
     <Compile Include="services\banks\service.js" />
     <Compile Include="services\branches\service.js" />
+    <Compile Include="services\commonservice.js" />
     <Compile Include="services\customers\service.js" />
+    <Compile Include="services\messages\service.js" />
     <Compile Include="services\metadata\service.js" />
     <Compile Include="services\otherAccounts\service.js" />
     <Compile Include="services\products\service.js" />

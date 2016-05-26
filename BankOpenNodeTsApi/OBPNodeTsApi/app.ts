@@ -39,10 +39,13 @@ passport.use(new CustomStrategy(
         }
         usersservice.listMore(question).then(
             function (resp: any) {
-                if (resp) {
-                    callback(null, JSON.parse(JSON.stringify(resp)))
+                if (resp['error']) {
+                    callback(null);
                 }
-                else { callback(null); }
+                else {
+                    //callback(null, JSON.parse(JSON.stringify(resp)))
+                    callback(null, resp['data'])
+                }
             }
         );
     }
@@ -53,7 +56,7 @@ passport.serializeUser(function (user, done) {
 passport.deserializeUser(function (user, done) {
     done(null, user);
 });
- 
+
 //connect database
 mongoose.connect(
     config.get<string>('dbConfigs.mongodb.type') + "://" +
@@ -92,18 +95,18 @@ app.use(passport.session());
 
 //filter middlware for NBG ID AND PAYLOAD
 app.use(function (req: express.Request, res, next) {
-    // console.log('req.method', req.method);
+    //console.log('req.method', req.method);
+    if (req.method == 'OPTIONS') { req.method = req.header('access-control-request-method') };
     if (req.method == 'POST'
         || req.method == 'PUT'
         || req.method == 'DELETE'
     ) {
         if (!req.header('Track-ID'))
-        { res.status(500).send('Error!no Track-ID'); next('Error!no Track-ID'); }
+        { res.status(417).send('Error!no Track-ID'); next('Error!no Track-ID'); }
         else if (!validator.isUUID(req.header('Track-ID')) && !validator.isMongoId(req.header('Track-ID')))
-        { res.status(500).send('Error!Track-ID must be a valid UUID'); next('Error!Track-ID must be a valid UUID'); }
+        { res.status(417).send('Error!Track-ID must be a valid UUID'); next('Error!Track-ID must be a valid UUID'); }
     }
     console.log(req.ip);
-    //if(res.status(404)){res.status(404).send('Error Request Not Found');}
     next();
 });
 
@@ -112,7 +115,9 @@ app.use('/', require('./routes/mainroutes'));
 app.use('/api', require('./routes/apiroutes'));
 app.use('/auth', require('./routes/auth'));
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.all('*', function (req: express.Request, res) {
+    res.status(404).send('what???');
+});
 
 // development only
 if ('development' == app.get('env')) {
@@ -127,4 +132,3 @@ http.createServer(app).listen(app.get('port'), function () {
 //    console.log('Express server http listening on port  + app.get('httpsport'));
 //});
 
- 

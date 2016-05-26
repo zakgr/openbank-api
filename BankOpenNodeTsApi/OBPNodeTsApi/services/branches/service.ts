@@ -4,18 +4,23 @@ import request = require('request');
 import config = require('config');
 import mongoose = require('mongoose');
 import branchesmodels = require('../../models/branches/model');
+import commonservice = require('../../services/commonservice');
 var branchemodel = new branchesmodels.branche();
 
 //Transform
-var brancheschema = branchemodel._schema;
-brancheschema.set('toJSON', {
-    transform: function (doc, ret, options) {
+export function transform(schema) {
+    function change(ret) {
         try { ret.meta.license = ret.meta.license.text; } catch (err) { }
         ret.id = ret._id;
         delete ret._id;
         delete ret.__v;
     }
-});
+    if (schema) {
+        if (schema.constructor === Object) { change(schema); }
+        else { schema.map(function (ret) { change(ret); }); }
+    }
+    return schema;
+};
 //connect to legacy public services example
 export function listAll2(a: any) {
     var deferred = Q.defer();
@@ -39,68 +44,54 @@ export function listAll2(a: any) {
 }
 export function listBid(string: string) {
     var deferred = Q.defer();
-    var thebranche = mongoose.model('branche', brancheschema);
-    thebranche.find(string)
+    var thebranche = mongoose.model('branche', branchemodel._schema);
+    thebranche.find(string).lean()
         .populate('meta.license', 'text -_id') // only works if we pushed refs to children
         .exec(function (err, found: branchesmodels.branchedef[]) {
-            if (err) deferred.resolve({ error: err });
-            deferred.resolve(found)
+            found = transform(found);
+            commonservice.answer(err, found, deferred);
         });
     return deferred.promise;
 }
 export function listId(string: string) {
     var deferred = Q.defer();
-    var thebranche = mongoose.model('branche', brancheschema);
-    thebranche.findOne(string)
+    var thebranche = mongoose.model('branche', branchemodel._schema);
+    thebranche.findOne(string).lean()
         .populate('meta.license', 'text -_id') // only works if we pushed refs to children
         .exec(function (err, found: branchesmodels.branchedef) {
-            if (err) deferred.resolve({ error: err });
-            deferred.resolve(found)
+            found = transform(found);
+            commonservice.answer(err, found, deferred);
         });
     return deferred.promise;
 }
 
 export function listMore(string: string) {
     var deferred = Q.defer();
-    var thebranche = mongoose.model('branche', brancheschema);
-    thebranche.find(string)
+    var thebranche = mongoose.model('branche', branchemodel._schema);
+    thebranche.find(string).lean()
         .populate('meta.license', 'text -_id') // only works if we pushed refs to children
         .exec(function (err, found: branchesmodels.branchedef[]) {
-            if (err) deferred.resolve({ error: err });
-            deferred.resolve(found)
+            found = transform(found);
+            commonservice.answer(err, found, deferred);
         });
     return deferred.promise;
 }
 
 export function set(string: string, object: branchesmodels.branchedef) {
-    function update() {
-        insert.validate(function (err) {
-            if (err) {
-                deferred.resolve(err);
-                return;
-            }
-            thebranche.findByIdAndUpdate(insert._id, insert, { upsert: true, new: true },
-                function (err2, found) {
-                    if (err2) deferred.resolve({ error: err2 });
-                    deferred.resolve(found)
-                });
-        });
-    }
     var deferred = Q.defer();
     var insert = branchemodel.set(object);
     var thebranche = mongoose.model('branche', branchemodel._schema);
     if (JSON.stringify(string) === "{}") {
-        update();
+        commonservice.update(insert, thebranche, deferred);
     }
     else {
         thebranche.findOne(string)
-            .select('islocked').exec(function (err, found: branchesmodels.branchedef) {
-                if (err) deferred.resolve({ error: err })
-                else if (!found) { deferred.resolve({ error: "Item not exists" }) }
-                else if (found.islocked) { deferred.resolve({ error: "This item is locked" }) }
+            .exec(function (err, found: branchesmodels.branchedef) {
+                if (err) deferred.resolve({ error: err, status: 500 })
+                else if (!found) { deferred.resolve({ error: "Item not exists", status: 409 }) }
                 else {
                     if (found && found._id) { insert._id = found._id; }
-                    update();
+                    commonservice.update(insert, thebranche, deferred);
                 }
             });
     }
@@ -110,18 +101,11 @@ export function set(string: string, object: branchesmodels.branchedef) {
 export function del(string: string) {
     var deferred = Q.defer();
     var thebranche = mongoose.model('branche', branchemodel._schema);
-    thebranche.findOne(string)
-        .select('islocked').exec(function (err, found: branchesmodels.branchedef) {
-            if (err) { deferred.resolve({ error: err }) }
-            else if (!found) { deferred.resolve({ error: "Item not exists" }) }
-            else if (found.islocked) { deferred.resolve({ error: "This item is locked" }) }
-            else {
-                thebranche.remove({ _id: found._id }, function (err2) {
-                    if (err2) deferred.resolve({ error: err2 });
-                    deferred.resolve({ "ok": 1 })
-                });
-            }
+    thebranche.findOneAndRemove(string)
+        .exec(function (err, found: branchesmodels.branchedef) {
+            if (err) { deferred.resolve({ error: err, status: 500 }) }
+            else if (!found) { deferred.resolve({ error: "Item not exists", status: 409 }) }
+            else { deferred.resolve({ data: { "ok": 1 }, status: 200 }) }
         });
-
     return deferred.promise;
 }

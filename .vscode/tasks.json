@@ -1,8 +1,24 @@
 {
-	"version": "0.1.0",
-    "command": "tsc",
+    "version": "0.1.0",
+    "windows": {
+        "command": "${workspaceRoot}/build.bat",
+        "args": []
+    },
+    "linux": {
+        "command": "${workspaceRoot}/build.sh",
+        "args": []
+    },
+    "osx": {
+        "command": "${workspaceRoot}/build.sh",
+        "args": []
+    },
     "isShellCommand": true,
     "showOutput": "silent",
-    "args": ["-p","${workspaceRoot}/BankOpenNodeTsApi/OBPNodeTsApi/"],
-    "problemMatcher": "$tsc"
+    "tasks": [
+        {
+            "taskName": "build",
+            "isBuildCommand": true,
+            "showOutput": "always"
+        }
+    ]
 }

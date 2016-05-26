@@ -2,12 +2,15 @@
 import express = require('express');
 import atmsservice = require('../../services/atms/service');
 import commonfunct = require('../../implementation/commonfunct');
+var name = { atms: null };
 
 export function listbid(req: express.Request, res: express.Response, next) {
     var question: any = {};
     question.bank_id = req.params.bid;
     atmsservice.listBid(question).then(
-        function (resp) { res.json({ atms: resp }) }
+        function (resp) {
+            commonfunct.response(resp, name, res, next)
+        }
     );
 };
 export function listid(req: express.Request, res: express.Response, next) {
@@ -15,46 +18,49 @@ export function listid(req: express.Request, res: express.Response, next) {
     question.bank_id = req.params.bid;
     question._id = req.params.id;
     atmsservice.listId(question).then(
-        function (resp) { res.json(resp) }
+        function (resp) {
+            commonfunct.response(resp, name, res, next)
+        }
     );
 };
 export function listmore(req: express.Request, res: express.Response, next) {
-    var question: any = {};
-    // like example commonfunct.customcontainsregexp(req.body.name) 
-    if (req.body.city) { question.city = commonfunct.customcontainsregexp(req.body.city); }
-    if (req.body.name) { question.name = commonfunct.customcontainsregexp(req.body.name); }
-    if (req.params.id) { question._id = req.params.id; }
-    if (req.params.bid) { question.bank_id = req.params.bid; }
-    if (JSON.stringify(question) === "{}") {
-        res.json({ reqwas: req.body, error: "No input data or wrong input data" })
-    }
-    atmsservice.listMore(question).then(
-        function (resp) { res.json({ atms: resp }) }
-    );
-};
-export function set(req: express.Request, res: express.Response, next) {
-    var question: any = {};
-    var input = req.body;
-    if (req.params.id) { question._id = req.params.id; }
-    input.bank_id = req.params.bid;
-    if (commonfunct.bankpermissions(req).can_edit_atms) {
-        atmsservice.set(question, input).then(
-            function (resp) { res.json({ atms: resp }) }
+    var check = { field: ['data'], params: [req, res, next] };
+    if (commonfunct.check(check)) {
+        var question: any = {};
+        if (req.body.city) { question.city = commonfunct.customcontainsregexp(req.body.city); }
+        if (req.body.name) { question.name = commonfunct.customcontainsregexp(req.body.name); }
+        if (req.params.id) { question._id = req.params.id; }
+        if (req.params.bid) { question.bank_id = req.params.bid; }
+        atmsservice.listMore(question).then(
+            function (resp) {
+                commonfunct.response(resp, name, res, next)
+            }
         );
     }
-    else {
-        res.json({ reqwas: req.body, error: "User has no can_edit_atms" })
+};
+export function set(req: express.Request, res: express.Response, next) {
+    var check = { field: ['can_edit_atms'], params: [req, res, next] };
+    if (commonfunct.check(check)) {
+        var question: any = {};
+        var input = req.body;
+        if (req.params.id) { question._id = req.params.id; }
+        input.bank_id = req.params.bid;
+        atmsservice.set(question, input).then(
+            function (resp) {
+                commonfunct.response(resp, name, res, next)
+            }
+        );
     }
 };
 export function del(req: express.Request, res: express.Response, next) {
-    var question: any = {};
-    if (req.params.id) { question._id = req.params.id; }
-    if (commonfunct.bankpermissions(req).can_edit_atms) {
+    var check = { field: ['can_edit_atms'], params: [req, res, next] };
+    if (commonfunct.check(check)) {
+        var question: any = {};
+        if (req.params.id) { question._id = req.params.id; }
         atmsservice.del(question).then(
-            function (resp) { res.json({ atms: resp }) }
+            function (resp) {
+                commonfunct.response(resp, name, res, next)
+            }
         );
-    }
-    else {
-        res.json({ reqwas: req.body, error: "User has no can_edit_atms" })
     }
 };

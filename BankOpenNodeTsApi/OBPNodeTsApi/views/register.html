@@ -1,22 +1,37 @@
 ﻿<div>
     <fieldset>
+        <legend>User Registration</legend>
         <form method="post">
-            <headers>
-                <label>Track-ID <input type="text" name="Track-ID" id="Track-ID"></label>
-            </headers>
-
             <body>
                 <label>Short Name:<br>
         <input type="text" name="short_name"><br> </label>
                 <label>Display Name:<br>
         <input type="text" name="display_name"><br></label>
+                <label>Can add Users:<br>
+<input type="checkbox" name="can_add_users" value=true><br></label>
+                <label>Can add Bank:<br>
+<input type="checkbox" name="can_add_bank" value=true><br></label>
+                <fieldset>
+                    <legend>Provider</legend>
+                    <label>Auth Provider Name:<br>
+        <input type="text" name="auth_provider_name"><br></label>
+                    <label>Auth ID:<br>
+        <input type="text" name="auth_id"><br></label></fieldset>
+                <fieldset>
+                    <legend>Bank Permissions</legend>
+                    <label>Bank:<br>
+        <input type="text" name="bank_id"><br></label>
+                    <label>Customer ID:<br>
+        <input type="text" name="customer_id"><br></label>
+                    <label>Can edit Branches:<br>
+<input type="checkbox" name="can_edit_branches" value=true><br></label>
+                    <label>Can edit Atms:<br>
+<input type="checkbox" name="can_edit_atms" value=true><br></label>
+                    <label>Can edit Products:<br>
+<input type="checkbox" name="can_edit_products" value=true><br></label>
+                </fieldset>
                 <input type="submit" value="Submit">
-
             </body>
         </form>
     </fieldset>
 </div>
-
-can_add_bank: true , can_add_users: true, providers: [ { auth_provider_name: "fakelogin", auth_id: "123456789" } ], bank_permissions:
-[ { bank_id: "5710bba5d42604e4072d1e72", customer_id: "5710bba5d42604e4072d1e73", can_edit_branches: true, can_edit_atms:false,
-can_edit_products: false } ]

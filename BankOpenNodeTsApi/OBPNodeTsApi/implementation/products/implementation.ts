@@ -2,12 +2,15 @@
 import express = require('express');
 import productsservice = require('../../services/products/service');
 import commonfunct = require('../../implementation/commonfunct');
+var name = { products: null };
 
 export function listbid(req: express.Request, res: express.Response, next) {
     var question: any = {};
     question.bank_id = req.params.bid;
     productsservice.listBid(question).then(
-        function (resp) { res.json({ products: resp }) }
+        function (resp) {
+            commonfunct.response(resp, name, res, next)
+        }
     );
 };
 export function listid(req: express.Request, res: express.Response, next) {
@@ -15,47 +18,50 @@ export function listid(req: express.Request, res: express.Response, next) {
     question.bank_id = req.params.bid;
     question._id = req.params.id;
     productsservice.listId(question).then(
-        function (resp) { res.json(resp) }
+        function (resp) {
+            commonfunct.response(resp, name, res, next)
+        }
     );
 };
 export function listmore(req: express.Request, res: express.Response, next) {
-    var question: any = {};
-    // like example commonfunct.customcontainsregexp(req.body.name) 
-    if (req.body.name) { question.name = commonfunct.customcontainsregexp(req.body.name); }
-    if (req.body.family) { question.family = commonfunct.customcontainsregexp(req.body.family); }
-    if (req.params.id) { question._id = req.params.id; }
-    if (req.params.bid) { question.bank_id = req.params.bid; }
-    if (req.body.category) { question.category = req.body.category; }
-    if (JSON.stringify(question) === "{}") {
-        res.json({ reqwas: req.body, error: "No input data or wrong input data" })
-    }
-    productsservice.listMore(question).then(
-        function (resp) { res.json({ products: resp }) }
-    );
-};
-export function set(req: express.Request, res: express.Response, next) {
-    var question: any = {};
-    var input = req.body;
-    if (req.params.id) { question._id = req.params.id; }
-    input.bank = req.params.bid;
-    if (commonfunct.bankpermissions(req).can_edit_customers) {
-        productsservice.set(question, input).then(
-            function (resp) { res.json({ products: resp }) }
+    var check = { field: ['data'], params: [req, res, next] };
+    if (commonfunct.check(check)) {
+        var question: any = {};
+        if (req.body.name) { question.name = commonfunct.customcontainsregexp(req.body.name); }
+        if (req.body.family) { question.family = commonfunct.customcontainsregexp(req.body.family); }
+        if (req.params.id) { question._id = req.params.id; }
+        if (req.params.bid) { question.bank_id = req.params.bid; }
+        if (req.body.category) { question.category = req.body.category; }
+        productsservice.listMore(question).then(
+            function (resp) {
+                commonfunct.response(resp, name, res, next)
+            }
         );
     }
-    else {
-        res.json({ reqwas: req.body, error: "User has no can_edit_products" })
+};
+export function set(req: express.Request, res: express.Response, next) {
+    var check = { field: ['can_edit_products'], params: [req, res, next] };
+    if (commonfunct.check(check)) {
+        var question: any = {};
+        var input = req.body;
+        input.bank = req.params.bid;
+        if (req.params.id) { question._id = req.params.id; }
+        productsservice.set(question, input).then(
+            function (resp) {
+                commonfunct.response(resp, name, res, next)
+            }
+        );
     }
 };
 export function del(req: express.Request, res: express.Response, next) {
-    var question: any = {};
-    if (req.params.id) { question._id = req.params.id; }
-    if (commonfunct.bankpermissions(req).can_edit_customers) {
+    var check = { field: ['can_edit_products'], params: [req, res, next] };
+    if (commonfunct.check(check)) {
+        var question: any = {};
+        if (req.params.id) { question._id = req.params.id; }
         productsservice.del(question).then(
-            function (resp) { res.json({ products: resp }) }
+            function (resp) {
+                commonfunct.response(resp, name, res, next)
+            }
         );
-    }
-    else {
-        res.json({ reqwas: req.body, error: "User has no can_edit_products" })
     }
 };

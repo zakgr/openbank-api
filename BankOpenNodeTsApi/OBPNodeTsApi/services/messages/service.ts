@@ -1,10 +1,9 @@
 ﻿//mongo data 
 import Q = require('q');
 import mongoose = require('mongoose');
-import metadatasmodels = require('../../models/metadata/model');
+import messagesmodels = require('../../models/messages/model');
 import commonservice = require('../../services/commonservice');
-var metadatamodel = new metadatasmodels.metadata();
-
+var messagemodel = new messagesmodels.message();
 
 //Transform
 export function transform(schema) {
@@ -19,54 +18,55 @@ export function transform(schema) {
     }
     return schema;
 };
-export function listAll() {
+export function listBid(string: string) {
     var deferred = Q.defer();
-    var themetadata = mongoose.model('metadata', metadatamodel._schema);
-    themetadata.find({}).lean()
-        .exec(function (err, found: metadatasmodels.metadatadef[]) {
+    var themessage = mongoose.model('message', messagemodel._schema);
+    themessage.find(string).lean()
+        .exec(function (err, found: messagesmodels.messagedef[]) {
+            found = transform(found);
+            commonservice.answer(err, found, deferred);
+        });
+    return deferred.promise;
+}
+export function listId(string: string) {
+    var deferred = Q.defer();
+    var themessage = mongoose.model('message', messagemodel._schema);
+    themessage.findOne(string).lean()
+        //.populate('type', 'name -_id') // only works if we pushed refs to children
+        .exec(function (err, found: messagesmodels.messagedef) {
+            found = transform(found);
+            commonservice.answer(err, found, deferred);
+        });
+    return deferred.promise;
+}
+export function listMore(string: string) {
+    var deferred = Q.defer();
+    //Transform
+    var themessage = mongoose.model('message', messagemodel._schema);
+    themessage.find(string).lean()
+        //  .populate('bank_id', 'text -_id') // only works if we pushed refs to children
+        .exec(function (err, found: messagesmodels.messagedef[]) {
             found = transform(found);
             commonservice.answer(err, found, deferred);
         });
     return deferred.promise;
 }
 
-export function listMore(string) {
+export function set(string: string, object: messagesmodels.messagedef) {
     var deferred = Q.defer();
-    var themetadata = mongoose.model('metadata', metadatamodel._schema);
-    themetadata.find(string).lean()
-        .exec(function (err, found: metadatasmodels.metadatadef[]) {
-            found = transform(found);
-            commonservice.answer(err, found, deferred);
-        });
-    return deferred.promise;
-}
-
-export function list(string: string) {
-    var deferred = Q.defer();
-    var themetadata = mongoose.model('metadata', metadatamodel._schema);
-    themetadata.findOne(string).lean()
-        .exec(function (err, found: metadatasmodels.metadatadef) {
-            found = transform(found);
-            commonservice.answer(err, found, deferred);
-        });
-    return deferred.promise;
-}
-
-export function set(string: string, object: metadatasmodels.metadatadef) {
-    var deferred = Q.defer();
-    var insert = metadatamodel.set(object);
-    var themetadata = mongoose.model('metadata', metadatamodel._schema);
+    var insert = messagemodel.set(object);
+    var themessage = mongoose.model('message', messagemodel._schema);
     if (JSON.stringify(string) === "{}") {
-        commonservice.update(insert, themetadata, deferred);
+        commonservice.update(insert, themessage, deferred);
     }
     else {
-        themetadata.findOne(string)
-            .exec(function (err, found: metadatasmodels.metadatadef) {
+        themessage.findOne(string)
+            .exec(function (err, found: messagesmodels.messagedef) {
                 if (err) deferred.resolve({ error: err, status: 500 })
                 else if (!found) { deferred.resolve({ error: "Item not exists", status: 409 }) }
                 else {
                     if (found && found._id) { insert._id = found._id; }
-                    commonservice.update(insert, themetadata, deferred);
+                    commonservice.update(insert, themessage, deferred);
                 }
             });
     }
@@ -75,9 +75,9 @@ export function set(string: string, object: metadatasmodels.metadatadef) {
 
 export function del(string: string) {
     var deferred = Q.defer();
-    var themetadata = mongoose.model('metadata', metadatamodel._schema);
-    themetadata.findOneAndRemove(string)
-        .exec(function (err, found: metadatasmodels.metadatadef) {
+    var themessage = mongoose.model('message', messagemodel._schema);
+    themessage.findOneAndRemove(string)
+        .exec(function (err, found: messagesmodels.messagedef) {
             if (err) { deferred.resolve({ error: err, status: 500 }) }
             else if (!found) { deferred.resolve({ error: "Item not exists", status: 409 }) }
             else { deferred.resolve({ data: { "ok": 1 }, status: 200 }) }

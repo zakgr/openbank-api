@@ -1,4 +1,5 @@
 ﻿import express = require('express');
+import users = require('../implementation/users/implementation');
 var router = express.Router();
 
 /* GET home page. */
@@ -13,7 +14,28 @@ router.get('/Register', function (req, res, next) {
     res.render('register');
 });
 router.post('/Register', function (req, res, next) {
-    res.send(req.body);
+    var input = req.body;
+    if (JSON.stringify(input) !== "{}") {
+        var providers = [];
+        var bank_permisions = [];
+        providers[0] = { auth_provider_name: input.auth_provider_name, auth_id: input.auth_id };
+        bank_permisions[0] = {
+            bank_id: input.bank_id, customer_id: input.customer_id,
+            can_edit_branches: input.can_edit_branches, can_edit_atms: input.can_edit_atms,
+            can_edit_products: input.can_edit_products
+        };
+        input.providers = providers;
+        input.bank_permisions = bank_permisions;
+        delete input.auth_provider_name;
+        delete input.auth_id;
+        delete input.bank_id;
+        delete input.customer_id;
+        delete input.can_edit_branches;
+        delete input.can_edit_atms;
+        delete input.can_edit_products;
+        users.set(req, res, next);
+    }
+    else { res.status(412).send('No Input Data') }
 });
 //examples for cookies
 //router.all('/setcookie', function (req, res, next) {

@@ -1,53 +1,56 @@
 ﻿//metadatas implemantation
 import express = require('express');
 import metadatasservice = require('../../services/metadata/service');
+import commonfunct = require('../../implementation/commonfunct');
+var name = { metadata: null };
 
 export function list(req: express.Request, res: express.Response, next) {
     metadatasservice.listAll().then(
-        function (resp) { res.json({ metadata: resp }) }
+        function (resp) {
+            commonfunct.response(resp, name, res, next)
+        }
     );
 };
 export function listmore(req: express.Request, res: express.Response, next) {
-    var question: any = {};
-    if (req.body.id) { question._id = req.body.id; }
-    if (JSON.stringify(question) === "{}") {
-        res.json({ reqwas: req.body, error: "No input data or wrong input data" })
+    var check = { field: ['data'], params: [req, res, next] };
+    if (commonfunct.check(check)) {
+        var question: any = {};
+        if (req.body.id) { question._id = req.body.id; }
+        metadatasservice.listMore(question).then(
+            function (resp) {
+                commonfunct.response(resp, name, res, next)
+            }
+        );
     }
-    metadatasservice.listMore(question).then(
-        function (resp) { res.json({ metadata: resp }) }
-    );
 };
 export function get(req: express.Request, res: express.Response, next) {
-    var question: any = {};
-    if (req.body.id) { question._id = req.body.id; }
-    if (JSON.stringify(question) === "{}") {
-        res.json({ reqwas: req.body, error: "No input data or wrong input data" })
+    var check = { field: ['data'], params: [req, res, next] };
+    if (commonfunct.check(check)) {
+        var question: any = {};
+        if (req.body.id) { question._id = req.body.id; }
+        metadatasservice.list(question).then(
+            function (resp) {
+                commonfunct.response(resp, name, res, next)
+            }
+        );
     }
-    metadatasservice.list(question).then(
-        function (resp) { res.json(resp) }
-    );
 };
 export function set(req: express.Request, res: express.Response, next) {
     var question: any = {};
-    if (req.body.id) { question._id = req.body.id; }
-    if (!req.body.insert) {
-        res.json({ reqwas: req.body, error: "No insert input" })
-    }
-    //if (JSON.stringify(question) === "{}") {
-    //    res.json({ reqwas: req.body, error: "No input data or wrong input data" })
-    //}
-    metadatasservice.set(question, req.body.insert).then(
-        function (resp) { res.json(resp) }
+    if (req.params.id) { question._id = req.params.id; }
+    metadatasservice.set(question, req.body).then(
+        function (resp) {
+            commonfunct.response(resp, name, res, next)
+        }
     );
 };
 export function del(req: express.Request, res: express.Response, next) {
     var question: any = {};
-    // like example new RegExp(req.body.name, "i") 
-    if (req.body.id) { question._id = req.body.id; }
-    if (JSON.stringify(question) === "{}") {
-        res.json({ reqwas: req.body, error: "No input data or wrong input data" })
-    }
+    // like example new RegExp(req.body.name, "i")
+    if (req.params.id) { question._id = req.params.id; }
     metadatasservice.del(question).then(
-        function (resp) { res.json(resp) }
+        function (resp) {
+            commonfunct.response(resp, name, res, next)
+        }
     );
 };

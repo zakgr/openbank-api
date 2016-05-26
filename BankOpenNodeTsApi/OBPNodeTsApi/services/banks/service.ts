@@ -2,77 +2,70 @@
 import Q = require('q');
 import mongoose = require('mongoose');
 import banksmodels = require('../../models/banks/model');
+import commonservice = require('../../services/commonservice');
 var bankmodel = new banksmodels.bank();
 
 //Transform
-var bankschema = bankmodel._schema;
-bankschema.set('toJSON', {
-    transform: function (doc, ret, options) {
+export function transform(schema) {
+    function change(ret) {
         ret.id = ret._id;
         delete ret._id;
         delete ret.__v;
     }
-});
-
+    if (schema) {
+        if (schema.constructor === Object) { change(schema); }
+        else { schema.map(function (ret) { change(ret); }); }
+    }
+    return schema;
+};
 export function listAll() {
     var deferred = Q.defer();
-    var thebank = mongoose.model('bank', bankschema);
-    thebank.find({}, function (err, found: banksmodels.bankdef[]) {
-        if (err) deferred.resolve({ error: err });
-        deferred.resolve(found)
-    });
+    var thebank = mongoose.model('bank', bankmodel._schema);
+    thebank.find({}).lean()
+        .exec(function (err, found: banksmodels.bankdef[]) {
+            found = transform(found);
+            commonservice.answer(err, found, deferred);
+        });
     return deferred.promise;
 }
 
 export function listId(string: string) {
     var deferred = Q.defer();
-    var thebank = mongoose.model('bank', bankschema);
-    thebank.findOne(string, function (err, found: banksmodels.bankdef) {
-        if (err) deferred.resolve({ error: err });
-        deferred.resolve(found)
-    });
+    var thebank = mongoose.model('bank', bankmodel._schema);
+    thebank.findOne(string).lean()
+        .exec(function (err, found: banksmodels.bankdef) {
+            found = transform(found);
+            commonservice.answer(err, found, deferred);
+        });
     return deferred.promise;
 }
 
 export function listMore(string: string) {
     var deferred = Q.defer();
-    var thebank = mongoose.model('bank', bankschema);
-    thebank.find(string, function (err, found: banksmodels.bankdef[]) {
-        if (err) deferred.resolve({ error: err });
-        deferred.resolve(found)
-    });
+    var thebank = mongoose.model('bank', bankmodel._schema);
+    thebank.find(string).lean()
+        .exec(function (err, found: banksmodels.bankdef[]) {
+            found = transform(found);
+            commonservice.answer(err, found, deferred);
+        });
     return deferred.promise;
 }
 
 export function set(string: string, object: banksmodels.bankdef) {
-    function update() {
-        insert.validate(function (err) {
-            if (err) {
-                deferred.resolve(err);
-                return;
-            }
-            thebank.findByIdAndUpdate(insert._id, insert, { upsert: true, new: true },
-                function (err2, found) {
-                    if (err2) deferred.resolve({ error: err2 });
-                    deferred.resolve(found)
-                });
-        });
-    }
     var deferred = Q.defer();
     var insert = bankmodel.set(object);
     var thebank = mongoose.model('bank', bankmodel._schema);
     if (JSON.stringify(string) === "{}") {
-        update();
+        commonservice.update(insert, thebank, deferred);
     }
     else {
         thebank.findOne(string)
-            .select('islocked').exec(function (err, found: banksmodels.bankdef) {
-                if (err) deferred.resolve({ error: err })
-                else if (!found) { deferred.resolve({ error: "Item not exists" }) }
-                else if (found.islocked) { deferred.resolve({ error: "This item is locked" }) }
+            .exec(function (err, found: banksmodels.bankdef) {
+                if (err) deferred.resolve({ error: err, status: 500 })
+                else if (!found) { deferred.resolve({ error: "Item not exists", status: 409 }) }
                 else {
                     if (found && found._id) { insert._id = found._id; }
-                    update();
+                    commonservice.update(insert, thebank, deferred);
                 }
             });
     }
@@ -82,18 +75,11 @@ export function set(string: string, object: banksmodels.bankdef) {
 export function del(string: string) {
     var deferred = Q.defer();
     var thebank = mongoose.model('bank', bankmodel._schema);
-    thebank.findOne(string)
-        .select('islocked').exec(function (err, found: banksmodels.bankdef) {
-            if (err) { deferred.resolve({ error: err }) }
-            else if (!found) { deferred.resolve({ error: "Item not exists" }) }
-            else if (found.islocked) { deferred.resolve({ error: "This item is locked" }) }
-            else {
-                thebank.remove({ _id: found._id }, function (err2) {
-                    if (err2) deferred.resolve({ error: err2 });
-                    deferred.resolve({ "ok": 1 })
-                });
-            }
+    thebank.findOneAndRemove(string)
+        .exec(function (err, found: banksmodels.bankdef) {
+            if (err) { deferred.resolve({ error: err, status: 500 }) }
+            else if (!found) { deferred.resolve({ error: "Item not exists", status: 409 }) }
+            else { deferred.resolve({ data: { "ok": 1 }, status: 200 }) }
         });
-
     return deferred.promise;
 }

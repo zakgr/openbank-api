@@ -1,6 +1,6 @@
 ﻿//connector 
 import mongoose = require('mongoose');
-import fs =  require('fs');
+import fs = require('fs');
 import config = require('config');
 //connect database
 mongoose.connect(
@@ -24,54 +24,25 @@ import customers = require('./models/customers/model');
 var b = new customers.customer();
 //lineReader.on('line', function (line) {
 //   var items = line.split(",");
-  //  if (items[0] != null) {
-      //  console.log("obj[1] : " + item.code);
+//  if (items[0] != null) {
+//  console.log("obj[1] : " + item.code);
 
- //       if (items[4] && items[4].length > 4 ){
+//       if (items[4] && items[4].length > 4 ){
 var id = mongoose.mongo.ObjectId("5731e8bf7315923c15ac9762");
 var bid = mongoose.mongo.ObjectId("5710bba5d42604e4072d1e72");
 
- //           }
-       var a: any = {
-           _id: id,
-           bank_id: bid,
-           legal_name: "FanisCustomer2"
+//           }
+var a: any = {
+    _id: id,
+    bank_id: bid,
+    legal_name: "FanisCustomer2"
 
-       };
-        
-        var c = b.set(a);
-        c.save(function (err, item: any) {
-            if (err) throw err;
-            console.log('customer saved successfully!');
-            if (item != null) {
-            }
-        });
+};
 
-    //}
-//})
-
-
-
-
-
-
-
-
-//var bank = new banks.bank();
-//var chris = bank.set( 11 , 'NBG GR', false);
-//var chris = bank.set(115, 'NBG GR 15');
-//console.log(chris.isNew);
-/////call the built-in save method to save to the database
-//chris.save(function (err, item: banks.bankdef) {
-//    if (err) throw err;
-//    console.log('bank saved successfully!');
-//    if (item != null) {
-
-//    }
-//});
-  
-
-/////call the built-in find return fields from the database
-//var thebank = mongoose.model('bank', bank._schema);
-
-////http://mongoosejs.com/docs/2.7.x/docs/finding-documents.html
+var c = b.set(a);
+c.save(function (err, item: any) {
+    if (err) throw err;
+    console.log('customer saved successfully!');
+    if (item != null) {
+    }
+});

@@ -21,5 +21,13 @@
       "clientSecret": "ssh-secret",
       "callbackURL": "/auth/login"
     }
+  },
+  "branchesservice": {
+    "url": "https://www.nbg.gr/branchibankpass/equeueing/api/eQueueing/areaBranches",
+    "bankcode": 111
+  },
+  "atmsservice": {
+    "url": "https://www.nbg.gr/branchibankpass/equeueing/api/eQueueing/areaAtms",
+    "bankcode": 111
   }
 }

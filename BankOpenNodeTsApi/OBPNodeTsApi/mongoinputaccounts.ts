@@ -22,17 +22,24 @@ import accounts = require('./models/accounts/model');
 var b = new accounts.account();
 lineReader.on('line', function (line) {
    var items = line.split(",");
+   
+
+   
     if (items[0] != null) {
-     
       var arr=[items[1]];
         var a: any =  {
             _id: null,
+            label: "acc_" + items[0]+ "_acc",
             number: items[0],
-            owners: ["571355e4432c0cdc13647990"],
+            owners: items[5],
             type: items[1],
-            balance: items[3].toString(),
+            balance:
+            { currency: 'EUR', 
+                ammount:items[3].toString()
+            },
             IBAN: "IBAN" + items[0],
-            islocked: true,
+            is_public: items[4],
+            views_available:["573d973a31455adc1de2aa54"],
             bank_id: "5710bba5d42604e4072d1e72"
         };
         console.log("item:"+ JSON.stringify(a) + "\n");
@@ -48,29 +55,3 @@ lineReader.on('line', function (line) {
 
     }
 })
-
-
-
-
-
-
-
-
-//var bank = new banks.bank();
-//var chris = bank.set( 11 , 'NBG GR', false);
-//var chris = bank.set(115, 'NBG GR 15');
-//console.log(chris.isNew);
-/////call the built-in save method to save to the database
-//chris.save(function (err, item: banks.bankdef) {
-//    if (err) throw err;
-//    console.log('bank saved successfully!');
-//    if (item != null) {
-
-//    }
-//});
-  
-
-/////call the built-in find return fields from the database
-//var thebank = mongoose.model('bank', bank._schema);
-
-////http://mongoosejs.com/docs/2.7.x/docs/finding-documents.html

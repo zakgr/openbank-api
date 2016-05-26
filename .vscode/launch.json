@@ -2,14 +2,36 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Launch",
+			"name": "Rebuild & Launch Api",
 			"type": "node",
 			"request": "launch",
+			"port": 3000,
 			"program": "${workspaceRoot}/BankOpenNodeTsApi/OBPNodeTsApi/app.ts",
 			"stopOnEntry": false,
 			"args": [],
 			"cwd": "${workspaceRoot}/BankOpenNodeTsApi/OBPNodeTsApi/",
-			"preLaunchTask": "tsc",
+			"preLaunchTask": "build",
+			"runtimeExecutable": null,
+			"runtimeArgs": [
+				"--nolazy"
+			],
+			"env": {
+				"NODE_ENV": "development"
+			},
+			"externalConsole": false,
+			"sourceMaps": true,
+			"outDir": null
+		},
+		{
+			"name": "Launch Api",
+			"type": "node",
+			"request": "launch",
+			"port": 3000,
+			"program": "${workspaceRoot}/BankOpenNodeTsApi/OBPNodeTsApi/app.ts",
+			"stopOnEntry": false,
+			"args": [],
+			"cwd": "${workspaceRoot}/BankOpenNodeTsApi/OBPNodeTsApi/",
+			"preLaunchTask": null,
 			"runtimeExecutable": null,
 			"runtimeArgs": [
 				"--nolazy"
