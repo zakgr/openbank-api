@@ -4,9 +4,9 @@
         <form method="post">
             <body>
                 <label>Short Name:<br>
-        <input type="text" name="short_name"><br> </label>
+        <input type="text" name="short_name" required><br> </label>
                 <label>Display Name:<br>
-        <input type="text" name="display_name"><br></label>
+        <input type="text" name="display_name" required><br></label>
                 <label>Can add Users:<br>
 <input type="checkbox" name="can_add_users" value=true><br></label>
                 <label>Can add Bank:<br>
@@ -14,9 +14,9 @@
                 <fieldset>
                     <legend>Provider</legend>
                     <label>Auth Provider Name:<br>
-        <input type="text" name="auth_provider_name"><br></label>
+        <input type="text" name="auth_provider_name" required><br></label>
                     <label>Auth ID:<br>
-        <input type="text" name="auth_id"><br></label></fieldset>
+        <input type="text" name="auth_id" required><br></label></fieldset>
                 <fieldset>
                     <legend>Bank Permissions</legend>
                     <label>Bank:<br>

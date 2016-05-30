@@ -4,7 +4,8 @@ import mongoose = require('mongoose');
 import accountsmodels = require('../../models/accounts/model');
 import commonservice = require('../../services/commonservice');
 var accountmodel = new accountsmodels.account();
-//var rq: any;
+var name = 'Account';
+
 function checkview(schemaView, rq) {
     function change(ret) {
         ret.views_available.forEach(function (view, index) {
@@ -40,11 +41,15 @@ export function transform(schema) {
                     ret2.id = ret2._id.toString();
                     delete ret2._id;
                     delete ret2.__v;
+                    delete ret2.createdAt;
+                    delete ret2.updatedAt;
                 })
         } catch (err) { }
         ret.id = ret._id;
         delete ret._id;
         delete ret.__v;
+        delete ret.createdAt;
+        delete ret.updatedAt;
     }
     if (schema) {
         if (schema.constructor === Object) { change(schema); }
@@ -74,7 +79,18 @@ export function listBid(json: any) {
         .populate('views_available') // only works if we pushed refs to children
         .exec(function (err, found: accountsmodels.accountdef[]) {
             found = transform(found);
-            commonservice.answer(err, found, deferred);
+            commonservice.answer(err, found, name, deferred);
+        });
+    return deferred.promise;
+}
+export function listId(string: string) {
+    var deferred = Q.defer();
+    var theaccount = mongoose.model('account', accountmodel._schema);
+    theaccount.findOne(string).lean()
+        .select('_id')
+        .exec(function (err, found) {
+            found = transform(found);
+            commonservice.answer(err, found, name, deferred);
         });
     return deferred.promise;
 }
@@ -87,13 +103,12 @@ export function listIdView(string) {
         .select('label number owners type balance IBAN swift_bic views_available bank_id')
         .populate('views_available') // only works if we pushed refs to children
         .exec(function (err, found: accountsmodels.accountdef) {
-
             found = transform(found);
             found = checkview(found, rq);
             if (found && !found.views_available[0])
-            { commonservice.answer("No view available", null, deferred); }
+            { commonservice.answer("No view available", null, null, deferred); }
             else {
-                commonservice.answer(err, found, deferred);
+                commonservice.answer(err, found, name, deferred);
             }
 
         });
@@ -106,7 +121,7 @@ export function listMore(string: string) {
         .populate('views_available') // only works if we pushed refs to children
         .exec(function (err, found: accountsmodels.accountdef[]) {
             found = transform(found);
-            commonservice.answer(err, found, deferred);
+            commonservice.answer(err, found, name, deferred);
         });
     return deferred.promise;
 }
@@ -133,9 +148,9 @@ export function set(string: string, object: accountsmodels.accountdef) {
 }
 export function setid(string, object) {
     var deferred = Q.defer();
-    var insert = { views_available: object };
+    //var insert = {$push:{ views_available: object }};
     var theaccount = mongoose.model('account', accountmodel._schema);
-    theaccount.findByIdAndUpdate(string._id, { $push: insert }, { new: true },
+    theaccount.findByIdAndUpdate(string._id, object, { new: true },
         function (err2, found) {
             if (err2) deferred.resolve({ error: err2, status: 400 });
             else if (!found) { deferred.resolve({ error: "Item not exists", status: 409 }) }

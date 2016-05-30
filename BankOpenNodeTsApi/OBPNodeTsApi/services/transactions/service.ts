@@ -4,7 +4,7 @@ import mongoose = require('mongoose');
 import transactionsmodels = require('../../models/transactions/model');
 import commonservice = require('../../services/commonservice');
 var transactionmodel = new transactionsmodels.transaction();
-
+var name = 'Transaction';
 //Transform
 export function transform(schema) {
     function change(ret) {
@@ -19,6 +19,8 @@ export function transform(schema) {
         ret.id = ret._id;
         delete ret._id;
         delete ret.__v;
+        delete ret.createdAt;
+        delete ret.updatedAt;
     }
     if (schema) {
         if (schema.constructor === Object) { change(schema); }
@@ -41,7 +43,7 @@ export function listAll() {
         .populate('metadata.where', 'text -_id') // only works if we pushed refs to children
         .exec(function (err, found: transactionsmodels.transactiondef[]) {
             found = transform(found);
-            commonservice.answer(err, found, deferred);
+            commonservice.answer(err, found, name, deferred);
         });
     return deferred.promise;
 }
@@ -60,7 +62,7 @@ export function listMore(string: string) {
         .populate('metadata.where', 'text -_id') // only works if we pushed refs to children
         .exec(function (err, found: transactionsmodels.transactiondef[]) {
             found = transform(found);
-            commonservice.answer(err, found, deferred);
+            commonservice.answer(err, found, name, deferred);
         });
     return deferred.promise;
 }
@@ -80,7 +82,7 @@ export function list(string: string) {
         .populate('metadata.where', 'text -_id') // only works if we pushed refs to children
         .exec(function (err, found: transactionsmodels.transactiondef) {
             found = transform(found);
-            commonservice.answer(err, found, deferred);
+            commonservice.answer(err, found, name, deferred);
         });
     return deferred.promise;
 }

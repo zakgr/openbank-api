@@ -4,13 +4,15 @@ import mongoose = require('mongoose');
 import banksmodels = require('../../models/banks/model');
 import commonservice = require('../../services/commonservice');
 var bankmodel = new banksmodels.bank();
-
+var name = 'Bank';
 //Transform
 export function transform(schema) {
     function change(ret) {
         ret.id = ret._id;
         delete ret._id;
         delete ret.__v;
+        delete ret.createdAt;
+        delete ret.updatedAt;
     }
     if (schema) {
         if (schema.constructor === Object) { change(schema); }
@@ -24,7 +26,7 @@ export function listAll() {
     thebank.find({}).lean()
         .exec(function (err, found: banksmodels.bankdef[]) {
             found = transform(found);
-            commonservice.answer(err, found, deferred);
+            commonservice.answer(err, found, name, deferred);
         });
     return deferred.promise;
 }
@@ -35,7 +37,7 @@ export function listId(string: string) {
     thebank.findOne(string).lean()
         .exec(function (err, found: banksmodels.bankdef) {
             found = transform(found);
-            commonservice.answer(err, found, deferred);
+            commonservice.answer(err, found, name, deferred);
         });
     return deferred.promise;
 }
@@ -46,7 +48,7 @@ export function listMore(string: string) {
     thebank.find(string).lean()
         .exec(function (err, found: banksmodels.bankdef[]) {
             found = transform(found);
-            commonservice.answer(err, found, deferred);
+            commonservice.answer(err, found, name, deferred);
         });
     return deferred.promise;
 }

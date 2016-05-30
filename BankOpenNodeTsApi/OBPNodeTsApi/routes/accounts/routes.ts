@@ -30,8 +30,9 @@ router.get('/banks/:bid' + path + '/public', accounts.listbidpublic);
 router.get('/banks/:bid' + path + '/:id/:vid/account', passport.authenticate('custom',
     { failureRedirect: '.' + '/account/public' }
 ), accounts.listidview);//get by id
+router.get('/banks/:bid' + path + '/:id/:vid/account/public', accounts.listidviewpublic);//get by id
 router.get('/banks/:bid' + path + '/:id/:vid/account' + '/:scope', passport.authenticate('custom',
-    { failureRedirect: '.' + '/account/public' }
+    { failureRedirect: '.' + '/account/public'}
 ), accounts.listidview);//get by id
 router.get('/banks/:bid' + path + '/:id/:vid/account/account'+'/public', function (req, res) {
     res.redirect('./../public');

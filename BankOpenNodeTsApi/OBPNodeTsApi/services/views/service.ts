@@ -4,7 +4,7 @@ import mongoose = require('mongoose');
 import viewsmodels = require('../../models/views/model');
 import commonservice = require('../../services/commonservice');
 var viewmodel = new viewsmodels.view();
-
+var name = 'View';
 //Transform
 export function transform(schema) {
     function change(ret) {
@@ -12,6 +12,8 @@ export function transform(schema) {
         ret.id = ret._id;
         delete ret._id;
         delete ret.__v;
+        delete ret.createdAt;
+        delete ret.updatedAt;
     }
     if (schema) {
         if (schema.constructor === Object) { change(schema); }
@@ -26,7 +28,7 @@ export function listBid(string: string) {
     theview.find(string).lean()
         .exec(function (err, found: viewsmodels.viewdef[]) {
             found = transform(found);
-            commonservice.answer(err, found, deferred);
+            commonservice.answer(err, found, name, deferred);
         });
     return deferred.promise;
 }
@@ -37,7 +39,7 @@ export function listId(string: string) {
     theview.findOne(string).lean()
         .exec(function (err, found: viewsmodels.viewdef) {
             found = transform(found);
-            commonservice.answer(err, found, deferred);
+            commonservice.answer(err, found, name, deferred);
         });
     return deferred.promise;
 }
@@ -48,7 +50,7 @@ export function listMore(string: string) {
     theview.find(string).lean()
         .exec(function (err, found: viewsmodels.viewdef[]) {
             found = transform(found);
-            commonservice.answer(err, found, deferred);
+            commonservice.answer(err, found, name, deferred);
         });
     return deferred.promise;
 }

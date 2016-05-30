@@ -1,4 +1,5 @@
 import mongoose = require('mongoose');
+import IBAN = require('iban');
 
 export interface otherAccountdef extends mongoose.Document {
     holder?: OtherAccountHolder;
@@ -9,7 +10,6 @@ export interface otherAccountdef extends mongoose.Document {
     bank?: OtherAccountBank;
     metadata?: OtherAccountMetadata;
     islocked?: any;
-    updated?: any;
 }
 
 export interface OtherAccountHolder {
@@ -41,7 +41,12 @@ export class otherAccount {
         },
         number: { type: String, trim: true },
         kind: { type: String, trim: true },
-        IBAN: { type: String, required: true, trim: true, index: { unique: true } },
+        IBAN: { type: String, required: true, trim: true,validate: {
+          validator: function(v) {
+            return IBAN.isValid(v);
+          },
+          message: '{VALUE} is not a valid IBAN!'
+        }, index: { unique: true } },
         swift_bic: { type: String, trim: true },
         bank: { type: mongoose.Schema.Types.ObjectId, ref: 'bank' },
         metadata: {
@@ -57,13 +62,12 @@ export class otherAccount {
         islocked: {
             //P.findOne().select('islocked').exec(callback); to selected 
             type: Boolean, select: false
-        },
-        updated: { type: Date, select: false }
-
-    }
+        }
+    }, 
+    { timestamps: true }
     )
         .pre('save', function (next) {
-            this.updated = new Date();
+            //this.updated = new Date();
             next();
         })
     ;

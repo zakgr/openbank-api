@@ -4,7 +4,7 @@ import mongoose = require('mongoose');
 import metadatasmodels = require('../../models/metadata/model');
 import commonservice = require('../../services/commonservice');
 var metadatamodel = new metadatasmodels.metadata();
-
+var name = 'Metadata';
 
 //Transform
 export function transform(schema) {
@@ -12,6 +12,8 @@ export function transform(schema) {
         ret.id = ret._id;
         delete ret._id;
         delete ret.__v;
+        delete ret.createdAt;
+        delete ret.updatedAt;
     }
     if (schema) {
         if (schema.constructor === Object) { change(schema); }
@@ -25,7 +27,7 @@ export function listAll() {
     themetadata.find({}).lean()
         .exec(function (err, found: metadatasmodels.metadatadef[]) {
             found = transform(found);
-            commonservice.answer(err, found, deferred);
+            commonservice.answer(err, found, name, deferred);
         });
     return deferred.promise;
 }
@@ -36,7 +38,7 @@ export function listMore(string) {
     themetadata.find(string).lean()
         .exec(function (err, found: metadatasmodels.metadatadef[]) {
             found = transform(found);
-            commonservice.answer(err, found, deferred);
+            commonservice.answer(err, found, name, deferred);
         });
     return deferred.promise;
 }
@@ -47,7 +49,7 @@ export function list(string: string) {
     themetadata.findOne(string).lean()
         .exec(function (err, found: metadatasmodels.metadatadef) {
             found = transform(found);
-            commonservice.answer(err, found, deferred);
+            commonservice.answer(err, found, name, deferred);
         });
     return deferred.promise;
 }

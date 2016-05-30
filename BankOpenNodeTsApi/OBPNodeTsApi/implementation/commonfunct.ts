@@ -72,7 +72,7 @@ export function check(checker) {
                         }
                         else {
                             for (var i = index + 1; i < req.body.providers.length; i++) {
-                                if ((prov.auth_provider_name == req.body.providers[i].auth_provider_name) && (prov.auth_id == req.body.providers[i].auth_id)) {
+                                if (prov.auth_provider_name == req.body.providers[i].auth_provider_name) {
                                     message = "Duplicate Provider found";
                                     err2()
                                     return;
@@ -146,27 +146,3 @@ export function response(resp, name, res, next) {
     }
     return;
 }
-export function view(req) {
-    var deferred = Q.defer();
-    var viewpermision: any = {};
-    viewpermision._id = req.vid;
-    viewpermision.bank_id = req.bid;
-    if (req.aid) { viewpermision.account_id = req.aid; }
-    else { viewpermision.account_id = req.id; }
-    viewsservice.listId(viewpermision).then(
-        function (resp) {
-            if (resp['data']) {
-                var temp = resp['data'];
-                for (var item in temp) {
-                    if (temp[item] == true) { delete temp[item] }
-                }
-                deferred.resolve(resp['data'])
-            }
-            else {
-                resp['error'] = 'No View Exist for this account';
-                deferred.resolve(resp)
-            }
-        }
-    );
-    return deferred.promise;
-};

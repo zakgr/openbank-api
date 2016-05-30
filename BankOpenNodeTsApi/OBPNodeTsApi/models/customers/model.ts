@@ -14,7 +14,6 @@ export interface customerdef extends mongoose.Document {
     meta?: any;
     bank_id?: any;
     islocked?: any;
-    updated?: any;
 }
 export interface CustomerFaceImage {
     url: string;
@@ -30,7 +29,7 @@ export class customer {
             type: String, trim: true
         },
         email: {
-            type: String, trim: true
+            type: String, trim: true, match: common.mail
         },
         faceImage: mongoose.Schema.Types.Mixed,
         crm: mongoose.Schema.Types.Mixed,
@@ -57,14 +56,12 @@ export class customer {
         bank_id: { type: mongoose.Schema.Types.ObjectId, ref: 'bank', select: false },
         islocked: {
             type: Boolean, select: false
-        },
-        updated: {
-            type: Date, select: false
         }
-    }
+    },
+        { timestamps: true }
     )
         .pre('save', function (next) {
-            this.updated = new Date();
+            //this.updated = new Date();
             next();
         });
     current: mongoose.Model<customerdef>;

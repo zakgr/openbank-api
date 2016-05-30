@@ -1,4 +1,6 @@
 ﻿import mongoose = require('mongoose');
+import common = require("../commoninterfaces");
+import IBAN = require('iban');
 
 export interface accountdef extends mongoose.Document {
     //hlpfull number
@@ -9,7 +11,7 @@ export interface accountdef extends mongoose.Document {
     owners: any;
     //here is product for nbg
     type: any;
-    balance: {currency:string,ammount:number};
+    balance: { currency: string, ammount: number };
     IBAN: string;
     swift_bic?: string;
     // views to be implemented
@@ -17,7 +19,6 @@ export interface accountdef extends mongoose.Document {
     meta?: any;
     bank_id: any;
     is_public?: boolean;
-    updated?: any;
 }
 
 export class account {
@@ -28,11 +29,16 @@ export class account {
         type: { type: mongoose.Schema.Types.ObjectId, ref: 'product', required: true, select: false },
         balance: {
             type: {
-                currency: { type: String, required: true },
+                currency: { type: String, required: true, enum: common.currency },
                 ammount: { type: Number, required: true }
             }, select: false
         },
-        IBAN: { type: String, required: true, index: { unique: true }, trim: true, select: false },
+        IBAN: { type: String, required: true, index: { unique: true },validate: {
+          validator: function(v) {
+            return IBAN.isValid(v);
+          },
+          message: '{VALUE} is not a valid IBAN!'
+        }, trim: true, select: false },
         swift_bic: { type: String, trim: true, select: false },
         views_available: { type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'view' }], required: true },
         meta: { type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'metadata' }], select: false },
@@ -40,12 +46,12 @@ export class account {
         is_public: {
             //P.findOne().select('islocked').exec(callback); to selected 
             type: Boolean, select: false
-        },
-        updated: { type: Date, select: false }
-    }
+        }
+    },
+        { timestamps: true }
     )
-        .pre('save', function(next) {
-            this.updated = new Date();
+        .pre('save', function (next) {
+            //this.updated = new Date();
             next();
         });
     current: mongoose.Model<accountdef>;
@@ -56,3 +62,6 @@ export class account {
         return new this.current(item);
     }
 }
+
+
+

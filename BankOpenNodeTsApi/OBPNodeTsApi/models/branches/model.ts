@@ -22,7 +22,6 @@ export interface branchedef extends mongoose.Document {
     lobby?: { is24Hours?: any; };
     bank_id?: any;
     islocked?: any;
-    updated?: any;
 }
 
 export class branche {
@@ -76,14 +75,12 @@ export class branche {
         bank_id: { type: mongoose.Schema.Types.ObjectId, ref: 'bank', select: false },
         islocked: {
             type: Boolean, select: false
-        },
-        updated: {
-            type: Date, select: false
         }
-    }
+    }, 
+    { timestamps: true}
     )
         .pre('save', function (next) {
-            this.updated = new Date();
+            //this.updated = new Date();
             next();
         })
     ;

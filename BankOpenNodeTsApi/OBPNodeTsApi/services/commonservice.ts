@@ -20,6 +20,8 @@ export function transform(schema) {
         ret.id = ret._id;
         delete ret._id;
         delete ret.__v;
+        delete ret.createdAt;
+        delete ret.updatedAt;
     }
     if (schema) {
         if (schema.constructor === Object) { change(schema); }
@@ -27,13 +29,13 @@ export function transform(schema) {
     }
     return schema;
 }
-export function answer(err, found, deferred) {
+export function answer(err, found, name, deferred) {
     if (err) {
         if (err.kind == "ObjectId") { deferred.resolve({ error: 'ID with value ' + err.value + ' is Not Valid', status: 400 }); }
         deferred.resolve({ error: err, status: 500 });
     }
     else if (!found || (found['length'] == 0)) {
-        deferred.resolve({ error: "Item or Items not exists", status: 404 })
+        deferred.resolve({ error: name + " not exists", status: 404 })
     }
     else {
         deferred.resolve({ data: found, status: 200 })

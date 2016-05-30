@@ -4,13 +4,15 @@ import mongoose = require('mongoose');
 import customersmodels = require('../../models/customers/model');
 import commonservice = require('../../services/commonservice');
 var customermodel = new customersmodels.customer();
-
+var name = 'Customer';
 //Transform
 export function transform(schema) {
     function change(ret) {
         ret.customer_number = ret._id;
         delete ret._id;
         delete ret.__v;
+        delete ret.createdAt;
+        delete ret.updatedAt;
     }
     if (schema) {
         if (schema.constructor === Object) { change(schema); }
@@ -24,7 +26,7 @@ export function listBid(string: string) {
     thecustomer.find(string).lean()
         .exec(function (err, found: customersmodels.customerdef[]) {
             found = transform(found);
-            commonservice.answer(err, found, deferred);
+            commonservice.answer(err, found, name, deferred);
         });
     return deferred.promise;
 }
@@ -34,7 +36,7 @@ export function listId(string: string) {
     thecustomer.findOne(string).lean()
         .exec(function (err, found: customersmodels.customerdef) {
             found = transform(found);
-            commonservice.answer(err, found, deferred);
+            commonservice.answer(err, found, name, deferred);
         });
     return deferred.promise;
 }
@@ -44,7 +46,7 @@ export function listMore(string: string) {
     thecustomer.find(string).lean()
         .exec(function (err, found: customersmodels.customerdef[]) {
             found = transform(found);
-            commonservice.answer(err, found, deferred);
+            commonservice.answer(err, found, name, deferred);
         });
     return deferred.promise;
 }

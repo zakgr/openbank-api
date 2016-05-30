@@ -43,43 +43,92 @@ export function listmore(req: express.Request, res: express.Response, next) {
 export function set(req: express.Request, res: express.Response, next) {
     var question: any = {};
     var input = req.body;
+    //fixes for views
     for (var item in input) {
         if (item.search('can') > -1) { delete input[item] }
     }
+
     input.bank_id = req.params.bid;
-
-
     if (req.params.id) { question._id = req.params.id; }
-    viewsservice.set(question, input).then(
-        function (resp) {
-            if (req.params.acid) {
-                var quest: any = {};
-                var inp: any = [];
-                quest._id = req.params.acid;
-                inp[0] = resp['data'].id.toString();
-                //missing code add or ensure view is in account available_views
-                accountsservice.setid(quest, inp).then(
-                    function (resp2) {
-                        commonfunct.response(resp, name, res, next)
-                    });
+    //if it is for a specific account
+    if (req.params.acid) {
+        var quest: any = {};
+        quest._id = req.params.acid;
+        accountsservice.listId(quest).then(function (resp) {
+            //if account id found
+            if (resp['data']) {
+                //create view
+                viewsservice.set(question, input).then(function (resp2) {
+                    //if view created
+                    if (resp2['data']) {
+                        //take view id and..
+                        var body = { $addToSet: { views_available: resp2['data'].id.toString() } }
+                        //..add view id to account
+                        accountsservice.setid(quest, body).then(function (resp3) {
+                            if (resp3['data'])
+                                commonfunct.response(resp2, name, res, next)
+                            else
+                                commonfunct.response(resp3, name, res, next)
+                        });
+                    }
+                    else {
+                        commonfunct.response(resp2, name, res, next)
+                    }
+                });
             }
-            //commonfunct.response(resp, name, res, next)
-
-
+            //else error message
+            else {
+                commonfunct.response(resp, name, res, next)
+            }
         });
+    }
+    else {
+        viewsservice.set(question, input).then(
+            function (resp) {
+                commonfunct.response(resp, name, res, next)
+            });
+    }
 };
 export function del(req: express.Request, res: express.Response, next) {
     var question: any = {};
-    // like example new RegExp(req.body.name, "i") 
-
+    question.bank_id = req.params.bid;
     if (req.params.id) { question._id = req.params.id; }
-    viewsservice.del(question).then(
-        function (resp) {
-            if (req.params.acid) {
-                //todo
-                //missing code add view to account available views
-                //check that view is not the last one or put default if last
+    if (req.params.acid && req.params.id) {
+        var quest: any = {};
+        quest._id = req.params.acid;
+        quest.views_available = req.params.id;
+        accountsservice.listId(quest).then(function (resp) {
+            //if account id found
+            if (resp['data']) {
+                //delete view
+                viewsservice.del(question).then(function (resp2) {
+                    //if view created
+                    if (resp2['data']) {
+                        //take view id and..
+                        var body = { $pull: { views_available: req.params.id } }
+                        //..add view id to account
+                        accountsservice.setid(quest, body).then(function (resp3) {
+                            if (resp3['data'])
+                                commonfunct.response(resp2, name, res, next)
+                            else
+                                commonfunct.response(resp3, name, res, next)
+                        });
+                    }
+                    else {
+                        commonfunct.response(resp2, name, res, next)
+                    }
+                });
             }
-            commonfunct.response(resp, name, res, next)
+            //else error message
+            else {
+                commonfunct.response(resp, name, res, next)
+            }
         });
+    }
+    else {
+        viewsservice.del(question).then(
+            function (resp) {
+                commonfunct.response(resp, name, res, next)
+            });
+    }
 };

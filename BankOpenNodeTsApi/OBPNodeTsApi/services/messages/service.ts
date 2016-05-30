@@ -4,13 +4,16 @@ import mongoose = require('mongoose');
 import messagesmodels = require('../../models/messages/model');
 import commonservice = require('../../services/commonservice');
 var messagemodel = new messagesmodels.message();
-
+var name = 'Message';
 //Transform
 export function transform(schema) {
     function change(ret) {
         ret.id = ret._id;
+        ret.date = ret.createdAt;
         delete ret._id;
         delete ret.__v;
+        delete ret.createdAt;
+        delete ret.updatedAt;
     }
     if (schema) {
         if (schema.constructor === Object) { change(schema); }
@@ -24,7 +27,7 @@ export function listBid(string: string) {
     themessage.find(string).lean()
         .exec(function (err, found: messagesmodels.messagedef[]) {
             found = transform(found);
-            commonservice.answer(err, found, deferred);
+            commonservice.answer(err, found, name, deferred);
         });
     return deferred.promise;
 }
@@ -35,7 +38,7 @@ export function listId(string: string) {
         //.populate('type', 'name -_id') // only works if we pushed refs to children
         .exec(function (err, found: messagesmodels.messagedef) {
             found = transform(found);
-            commonservice.answer(err, found, deferred);
+            commonservice.answer(err, found, name, deferred);
         });
     return deferred.promise;
 }
@@ -47,7 +50,7 @@ export function listMore(string: string) {
         //  .populate('bank_id', 'text -_id') // only works if we pushed refs to children
         .exec(function (err, found: messagesmodels.messagedef[]) {
             found = transform(found);
-            commonservice.answer(err, found, deferred);
+            commonservice.answer(err, found, name, deferred);
         });
     return deferred.promise;
 }

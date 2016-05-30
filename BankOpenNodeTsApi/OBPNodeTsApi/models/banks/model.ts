@@ -8,8 +8,6 @@ export interface bankdef extends mongoose.Document {
     logo?: string;
     website?: string;
     islocked?: any;
-    updated?: any;
-
 }
 
 export class bank {
@@ -29,13 +27,12 @@ export class bank {
         islocked: {
             //P.findOne().select('islocked').exec(callback); to selected 
             type: Boolean, select: false
-        },
-        updated: {
-            type: Date, select: false
         }
-    })
+    }, 
+    { timestamps: true}
+    )
         .pre('save', function (next) {
-            this.updated = new Date();
+            //this.updated = new Date();
             next();
         });
     current: mongoose.Model<bankdef>;

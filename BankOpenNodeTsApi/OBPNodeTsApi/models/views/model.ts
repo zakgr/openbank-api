@@ -75,7 +75,7 @@ export interface viewdef extends mongoose.Document {
     can_initiate_transaction?: boolean;
     can_approve_transaction?: boolean;
     can_cancel_transaction?: boolean;
-    can_pause_transaction?: boolean
+    can_pause_transaction?: boolean;
 }
 
 export class view {
@@ -150,10 +150,11 @@ export class view {
         can_approve_transaction: { type: Boolean, default: false },
         can_cancel_transaction: { type: Boolean, default: false },
         can_pause_transaction: { type: Boolean, default: false }
-    }
+    }, 
+    { timestamps: true}
     )
         .pre('save', function (next) {
-            this.updated = new Date();
+            //this.updated = new Date();
             next();
         })
     ;
@@ -165,12 +166,12 @@ export class view {
         return new this.current(item);
     }
     empty() {
-       var item: viewdef = null;
-       // {
-            
-            
-            
-    //    }
+        var item: viewdef = null;
+        // {
+
+
+
+        //    }
         return new this.current(item);
     }
 }

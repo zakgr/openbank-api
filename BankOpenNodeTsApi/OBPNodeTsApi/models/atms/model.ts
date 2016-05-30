@@ -21,13 +21,12 @@ export interface atmdef extends mongoose.Document {
     lobby?: { is24Hours?: any; };
     bank_id?: any;
     islocked?: any;
-    updated?: any;
 }
 
 export class atm {
     _schema: mongoose.Schema = new mongoose.Schema({
         name: {
-            type: String, required: true, trim: true, index: { unique: true }
+            type: String, required: true, trim: true, uppercase: true
         },
         location: {
             latitude: {
@@ -73,13 +72,12 @@ export class atm {
         islocked: {
             type: Boolean, select: false
         },
-        updated: {
-            type: Date, select: false
-        }
-    }
+    },
+        { timestamps: true }
     )
+        .index({ name: 1, bank_id: -1 }, { unique: true })
         .pre('save', function (next) {
-            this.updated = new Date();
+            //this.updated = new Date();
             next();
         });
     current: mongoose.Model<atmdef>;

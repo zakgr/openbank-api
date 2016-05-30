@@ -29,7 +29,6 @@ export interface userdef extends mongoose.Document {
             can_edit_all_transactions_for_banks?: boolean;
         }
     ];
-    updated?: any;
 }
 
 export class user {
@@ -99,13 +98,13 @@ export class user {
                     type: Boolean
                 }
             }
-        ],
-        updated: {
-            type: Date
-        }
-    })
+        ]
+    },
+        { timestamps: true }
+    )
+        .index({ 'providers.auth_provider_name': 1, 'providers.auth_id': -1 }, { unique: true })
         .pre('save', function (next) {
-            this.updated = new Date();
+            //this.updated = new Date();
             next();
         });
     current: mongoose.Model<userdef>;

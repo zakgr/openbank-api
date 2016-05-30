@@ -4,13 +4,15 @@ import mongoose = require('mongoose');
 import usersmodels = require('../../models/users/model');
 import commonservice = require('../../services/commonservice');
 var usermodel = new usersmodels.user();
-
+var name = 'User';
 //Transform
 export function transform(schema) {
     function change(ret) {
         ret.id = ret._id;
         delete ret._id;
         delete ret.__v;
+        delete ret.createdAt;
+        delete ret.updatedAt;
     }
     if (schema) {
         if (schema.constructor === Object) { change(schema); }
@@ -25,7 +27,7 @@ export function listAll() {
     theuser.find({}).lean()
         .exec(function (err, found: usersmodels.userdef[]) {
             found = transform(found);
-            commonservice.answer(err, found, deferred);
+            commonservice.answer(err, found, name, deferred);
         });
     return deferred.promise;
 }
@@ -36,7 +38,7 @@ export function listId(string: string) {
     theuser.findOne(string).lean()
         .exec(function (err, found: usersmodels.userdef) {
             found = transform(found);
-            commonservice.answer(err, found, deferred);
+            commonservice.answer(err, found, name, deferred);
         });
     return deferred.promise;
 }
@@ -47,7 +49,7 @@ export function listMore(string: string) {
     theuser.findOne({ providers: { $elemMatch: string } }).lean()
         .exec(function (err, found: usersmodels.userdef[]) {
             found = transform(found);
-            commonservice.answer(err, found, deferred);
+            commonservice.answer(err, found, name, deferred);
         });
     return deferred.promise;
 }
@@ -69,7 +71,7 @@ export function listExist(json: any) {
         .select('providers -_id')
         .exec(function (err, found: usersmodels.userdef[]) {
             found = transform(found);
-            commonservice.answer(err, found, deferred);
+            commonservice.answer(err, found, name, deferred);
         });
     return deferred.promise;
 }

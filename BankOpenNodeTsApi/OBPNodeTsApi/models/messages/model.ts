@@ -1,12 +1,11 @@
 ﻿import mongoose = require('mongoose');
 
 export interface messagedef extends mongoose.Document {
-    bank_id?:any;
-    customer_id?:any;
+    bank_id?: any;
+    customer_id?: any;
     message: string;
     from_department: string;
     from_person: string;
-    date?: any;
     expireAt?: any;
 }
 
@@ -23,13 +22,12 @@ export class message {
         from_person: {
             type: String, required: true, trim: true
         },
-        date: {
-            type: Date, default:Date.now
-        },
         expireAt: {
-            type: Date,expires:'2s'
+            type: Date, expires: '120s'
         }
-    })
+    }, 
+    { timestamps: true }
+    )
         .pre('save', function (next) {
             this.expireAt = new Date();
             next();

@@ -1,4 +1,5 @@
 import mongoose = require('mongoose');
+import common = require("../commoninterfaces");
 
 export interface transactiondef extends mongoose.Document {
     uuid?: string;
@@ -68,11 +69,11 @@ export class transaction {
             posted: Date,
             completed: Date,
             new_balance: {
-                currency: { type: String, trim: true },
+                currency: { type: String, trim: true, enum: common.currency },
                 amount: Number
             },
             value: {
-                currency: { type: String, trim: true },
+                currency: { type: String, trim: true, enum: common.currency },
                 amount: Number
             }
         },
@@ -89,10 +90,11 @@ export class transaction {
             where: { type: mongoose.Schema.Types.ObjectId, ref: 'metadata' },
         },
 
-    }
+    },
+        { timestamps: true }
     )
         .pre('save', function (next) {
-            this.updated = new Date();
+            //this.updated = new Date();
             next();
         })
     ;

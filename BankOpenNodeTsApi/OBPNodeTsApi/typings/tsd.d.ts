@@ -17,5 +17,5 @@
 /// <reference path="request/request.d.ts" />
 /// <reference path="validator/validator.d.ts" />
 /// <reference path="mongoose-deep-populate/mongoose-deep-populate.d.ts" />
-
+/// <reference path="iban/iban.d.ts" />
 

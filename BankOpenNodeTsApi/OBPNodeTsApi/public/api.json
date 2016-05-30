@@ -5,7 +5,7 @@
         "description": "DEFAULT",
         "version": "0.0.9"
     },
-    "host": "localhost:3005",
+    "host": "nbgnodeapi.cloudapp.net",
     "basePath": "/",
     "schemes": [
         "http"
@@ -4505,7 +4505,18 @@
         "MessageResponse": {
             "description": "Model for MessagesResponse",
             "properties": {
-                "$ref": "#/definitions/MessageDef/properties"
+                "date": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "from_department": {
+                    "type": "string"
+                },
+                "from_person": {
+                    "type": "string"
+                }
             }
         },
         "MessagesResponse": {
@@ -4517,7 +4528,7 @@
                 "messages": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/MessageDef"
+                        "$ref": "#/definitions/MessageResponse"
                     }
                 }
             }
@@ -5381,9 +5392,6 @@
         },
         "SetDelDef": {
             "description": "Model for SetDelDef",
-            "required": [
-                "n"
-            ],
             "properties": {
                 "n": {
                     "type": "integer",

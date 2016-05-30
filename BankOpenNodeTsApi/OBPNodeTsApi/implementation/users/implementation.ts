@@ -28,28 +28,16 @@ export function listmore(req: express.Request, res: express.Response, next) {
 export function set(req: express.Request, res: express.Response, next) {
     var check = { field: ['providers'], params: [req, res, next] };
     if (commonfunct.check(check)) {
-        var question: any = [];
+        var question: any = {};
         var input = req.body;
         var provider_name = req.header('Auth-Provider-Name');
         var auth_id = req.header('Auth-ID');
-        question = input.providers;
-            usersservice.listExist(question).then(
-                function (prvdr) {
-                    if (prvdr['data']) {
-                        res.status(406).send("One of the Providers Exists");
-                        next("One of the Providers Exists")
-                    }
-                    else {
-                        question = {};
-                        if (req.params.id) { question._id = req.params.id }
-                        usersservice.set(question, input).then(
-                            function (resp) {
-                                commonfunct.response(resp, name, res, next)
-                            }
-                        );
-                    }
-                }
-            );
+        if (req.params.id) { question._id = req.params.id }
+        usersservice.set(question, input).then(
+            function (resp) {
+                commonfunct.response(resp, name, res, next)
+            }
+        );
     }
 };
 export function del(req: express.Request, res: express.Response, next) {

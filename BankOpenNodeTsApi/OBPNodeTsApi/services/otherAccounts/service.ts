@@ -4,7 +4,7 @@ import mongoose = require('mongoose');
 import otherAccountsmodels = require('../../models/otherAccounts/model');
 import commonservice = require('../../services/commonservice');
 var otherAccountmodel = new otherAccountsmodels.otherAccount();
-
+var name = 'otherAccount';
 //Transform
 export function transform(schema) {
     function change(ret) {
@@ -20,6 +20,8 @@ export function transform(schema) {
         ret.id = ret._id;
         delete ret._id;
         delete ret.__v;
+        delete ret.createdAt;
+        delete ret.updatedAt;
     }
     if (schema) {
         if (schema.constructor === Object) { change(schema); }
@@ -43,7 +45,7 @@ export function listBid(string: string) {
         .populate('metadata.physical_location', 'text -_id') // only works if we pushed refs to children
         .exec(function (err, found: otherAccountsmodels.otherAccountdef[]) {
             found = transform(found);
-            commonservice.answer(err, found, deferred);
+            commonservice.answer(err, found, name, deferred);
         });
     return deferred.promise;
 }
@@ -62,7 +64,7 @@ export function listId(string: string) {
         .populate('metadata.physical_location', 'text -_id') // only works if we pushed refs to children
         .exec(function (err, found: otherAccountsmodels.otherAccountdef) {
             found = transform(found);
-            commonservice.answer(err, found, deferred);
+            commonservice.answer(err, found, name, deferred);
         });
     return deferred.promise;
 }
@@ -82,7 +84,7 @@ export function listMore(string: string) {
         .populate('metadata.physical_location', 'text -_id') // only works if we pushed refs to children
         .exec(function (err, found: otherAccountsmodels.otherAccountdef[]) {
             found = transform(found);
-            commonservice.answer(err, found, deferred);
+            commonservice.answer(err, found, name, deferred);
         });
     return deferred.promise;
 }
@@ -102,7 +104,7 @@ export function list(string: string) {
         .populate('metadata.physical_location', 'text -_id') // only works if we pushed refs to children
         .exec(function (err, found: otherAccountsmodels.otherAccountdef) {
             found = transform(found);
-            commonservice.answer(err, found, deferred);
+            commonservice.answer(err, found, name, deferred);
         });
     return deferred.promise;
 }

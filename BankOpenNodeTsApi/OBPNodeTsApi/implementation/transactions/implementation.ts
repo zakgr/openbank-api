@@ -2,6 +2,8 @@
 import express = require('express');
 import transactionsservice = require('../../services/transactions/service');
 import commonfunct = require('../../implementation/commonfunct');
+import accountsservice = require('../../services/accounts/service');
+import Q = require('q');
 var name = { transactions: null };
 
 export function list(req: express.Request, res: express.Response, next) {
@@ -33,13 +35,51 @@ export function listmore(req: express.Request, res: express.Response, next) {
     }
 };
 export function set(req: express.Request, res: express.Response, next) {
+    function transaction() {
+        if (fromaccount && toacccount) {
+            transactionsservice.set(question, input).then(
+                function (resp) {
+                    commonfunct.response(resp, name, res, next)
+                });
+        }
+    }
     var question: any = {};
     var input = req.body;
+    var fromaccount: boolean, toacccount: boolean;
     if (req.params.id) { question._id = req.params.id; }
-    transactionsservice.set(question, input).then(
-        function (resp) {
-            commonfunct.response(resp, name, res, next)
+    if (input.from.other_account_id) {
+        question.this_account = input.from.other_account_id;
+        fromaccount = true;
+    }
+    else if (input.from.account_id && input.from.bank_id) {
+        question.from = {};
+        question.from._id = input.from.account_id;
+        question.from.bank_id = input.from.bank_id;
+        accountsservice.listId(question.from).then(function (resp) {
+            if (resp['data']) {
+                fromaccount = true;
+                Q.nextTick(transaction);
+            }
+            else commonfunct.response(resp, name, res, next)
         });
+    }
+    if (input.to.other_account_id) {
+        question.other_account = input.to.other_account_id;
+        toacccount = true;
+    }
+    else if (input.to.account_id && input.to.bank_id) {
+        question.to = {};
+        question.to._id = input.to.account_id;
+        question.to.bank_id = input.to.bank_id;
+        accountsservice.listId(question.to).then(function (resp) {
+            if (resp['data']) {
+                toacccount = true;
+                Q.nextTick(transaction);
+            }
+            else commonfunct.response(resp, name, res, next)
+        });
+    }
+    Q.nextTick(transaction);
 };
 export function del(req: express.Request, res: express.Response, next) {
     var question: any = {};

@@ -9,7 +9,6 @@ export interface productdef extends mongoose.Document {
     meta?: any;
     bank_id?: any;
     islocked?: any;
-    updated?: any;
 }
 
 export class product {
@@ -31,12 +30,12 @@ export class product {
         },
         meta: { type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'metadata' }], select: false },
         bank_id: { type: mongoose.Schema.Types.ObjectId, ref: 'bank', select: false },
-        islocked: { type: Boolean, select: false },
-        updated: { type: Date, select: false }
-    }
+        islocked: { type: Boolean, select: false }
+    }, 
+    { timestamps: true }
     )
         .pre('save', function (next) {
-            this.updated = new Date();
+            //this.updated = new Date();
             next();
         });
     current: mongoose.Model<productdef>;

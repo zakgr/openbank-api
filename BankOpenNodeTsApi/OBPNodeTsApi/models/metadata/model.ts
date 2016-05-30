@@ -5,8 +5,6 @@ export interface metadatadef extends mongoose.Document {
     text: any;
     postedBy?: string;
     islocked?: any;
-    updated?: any;
-
 }
 
 export class metadata {
@@ -19,14 +17,12 @@ export class metadata {
         },
         islocked: {
             type: Boolean, select: false
-        },
-        updated: {
-            type: Date, select: false
         }
-    }
+    }, 
+    { timestamps: true }
     )
         .pre('save', function (next) {
-            this.updated = new Date();
+            //this.updated = new Date();
             next();
         });
 
