@@ -1,13 +1,13 @@
-// transactions implementation
+// transactionRequests implementation
 import express = require('express');
-import transactionsservice = require('../../services/transactions/service');
+import transactionRequestsservice = require('../../services/transactionRequests/service');
 import commonfunct = require('../../implementation/commonfunct');
 import accountsservice = require('../../services/accounts/service');
 import Q = require('q');
-var name = { transactions: null };
+var name = { 'transaction-requests': null };
 
 export function list(req: express.Request, res: express.Response, next) {
-    transactionsservice.listAll().then(
+    transactionRequestsservice.listAll().then(
         function (resp) {
             commonfunct.response(resp, name, res, next)
         }
@@ -27,7 +27,7 @@ export function listmore(req: express.Request, res: express.Response, next) {
         }
         if (req.body.uuid) { question.uuid = req.body.uuid; }
         if (req.params.id) { question._id = req.params.id; }
-        transactionsservice.listMore(question).then(
+        transactionRequestsservice.listMore(question).then(
             function (resp) {
                 commonfunct.response(resp, name, res, next)
             }
@@ -35,10 +35,10 @@ export function listmore(req: express.Request, res: express.Response, next) {
     }
 };
 export function set(req: express.Request, res: express.Response, next) {
-    function transaction() {
+    function transactionRequest() {
         if (fromaccount && toacccount) {
             input.details.posted = new Date().toISOString();
-            transactionsservice.set(question, input).then(
+            transactionRequestsservice.set(question, input).then(
                 function (resp) {
                     commonfunct.response(resp, name, res, next)
                 });
@@ -70,7 +70,7 @@ export function set(req: express.Request, res: express.Response, next) {
                 fromaccount = true;
                 input.this_account_insystem = input.from.account_id;
                 delete question.from;
-                Q.nextTick(transaction);
+                Q.nextTick(transactionRequest);
             }
             else commonfunct.response(resp, name, res, next)
         });
@@ -83,24 +83,23 @@ export function set(req: express.Request, res: express.Response, next) {
         question.to = {};
         question.to._id = input.to.account_id;
         question.to.bank_id = input.to.bank_id;
+        question.to.balance = { type: { currency: input.value.currency } };
         accountsservice.listId(question.to).then(function (resp) {
             if (resp['data']) {
-                toacccount = true;
-                input.other_account_insystem = input.to.account_id;
-                delete question.to;
-                Q.nextTick(transaction);
+                if (input.value.currency == resp['data'].balance.type.currency) {
+                    toacccount = true;
+                    input.other_account_insystem = input.to.account_id;
+                    delete question.to;
+                    Q.nextTick(transactionRequest);
+                }
+                else {
+                    delete resp['data'];
+                    resp = { error: 'Currency Not Same', status: 400 };
+                    commonfunct.response(resp, name, res, next)
+                }
             }
             else commonfunct.response(resp, name, res, next)
         });
     }
-    Q.nextTick(transaction);
-};
-export function del(req: express.Request, res: express.Response, next) {
-    var question: any = {};
-    // like example new RegExp(req.body.name, "i") 
-    if (req.params.id) { question._id = req.params.id; }
-    transactionsservice.del(question).then(
-        function (resp) {
-            commonfunct.response(resp, name, res, next)
-        });
+    Q.nextTick(transactionRequest);
 };

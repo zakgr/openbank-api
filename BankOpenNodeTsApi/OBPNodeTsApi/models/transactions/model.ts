@@ -55,7 +55,7 @@ export class transaction {
     _schema: mongoose.Schema = new mongoose.Schema({
         uuid: { type: String, trim: true },
         details: {
-            status: String,
+            status: { type: String, trim: true, default: 'DRAFT', enum: ['DRAFT', 'APPROVED', 'PAUSED', 'CANCELLED', 'COMPLETED'] },
             posted_by_user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
             approved_by_user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
             paused_by_user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },

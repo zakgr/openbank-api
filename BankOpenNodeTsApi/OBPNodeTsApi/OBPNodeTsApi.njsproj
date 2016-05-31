@@ -38,11 +38,14 @@
     <Content Include="implementation\messages\implementation.js.map" />
     <Content Include="implementation\users\implementation.js.map" />
     <Content Include="models\messages\model.js.map" />
+    <Content Include="models\transactionRequests\model.js.map" />
     <Content Include="public\api.json" />
     <Content Include="routes\messages\routes.js.map" />
+    <Content Include="routes\transactionRequests\routes.js.map" />
     <Content Include="routes\users\routes.js.map" />
     <Content Include="services\commonservice.js.map" />
     <Content Include="services\messages\service.js.map" />
+    <Content Include="services\transactionRequests\service.js.map" />
     <Content Include="views\register.html" />
     <TypeScriptCompile Include="app.ts" />
     <TypeScriptCompile Include="implementation\accounts\implementation.ts" />
@@ -72,6 +75,7 @@
     <TypeScriptCompile Include="models\metadata\model.ts" />
     <TypeScriptCompile Include="models\otherAccounts\model.ts" />
     <TypeScriptCompile Include="models\products\model.ts" />
+    <TypeScriptCompile Include="models\transactionRequests\model.ts" />
     <TypeScriptCompile Include="models\transactions\model.ts" />
     <TypeScriptCompile Include="models\users\model.ts" />
     <TypeScriptCompile Include="models\views\model.ts" />
@@ -147,6 +151,7 @@
     <TypeScriptCompile Include="routes\metadata\routes.ts" />
     <TypeScriptCompile Include="routes\otherAccounts\routes.ts" />
     <TypeScriptCompile Include="routes\products\routes.ts" />
+    <TypeScriptCompile Include="routes\transactionRequests\routes.ts" />
     <TypeScriptCompile Include="routes\transactions\routes.ts" />
     <TypeScriptCompile Include="routes\users\routes.ts" />
     <TypeScriptCompile Include="routes\views\routes.ts" />
@@ -160,6 +165,7 @@
     <TypeScriptCompile Include="services\metadata\service.ts" />
     <TypeScriptCompile Include="services\otherAccounts\service.ts" />
     <TypeScriptCompile Include="services\products\service.ts" />
+    <TypeScriptCompile Include="services\transactionRequests\service.ts" />
     <TypeScriptCompile Include="services\transactions\service.ts" />
     <TypeScriptCompile Include="services\users\service.ts" />
     <TypeScriptCompile Include="services\views\service.ts" />
@@ -177,6 +183,7 @@
     <TypeScriptCompile Include="typings\express\express.d.ts" />
     <TypeScriptCompile Include="typings\form-data\form-data.d.ts" />
     <TypeScriptCompile Include="typings\form-data\form-data.d.ts" />
+    <TypeScriptCompile Include="typings\iban\iban.d.ts" />
     <TypeScriptCompile Include="typings\mime\mime.d.ts" />
     <TypeScriptCompile Include="typings\mime\mime.d.ts" />
     <TypeScriptCompile Include="typings\mongoose-deep-populate\mongoose-deep-populate.d.ts" />
@@ -228,6 +235,7 @@
     <Folder Include="models\metadata\" />
     <Folder Include="models\otherAccounts\" />
     <Folder Include="models\products\" />
+    <Folder Include="models\transactionRequests\" />
     <Folder Include="models\transactions\" />
     <Folder Include="models\users\" />
     <Folder Include="models\views\" />
@@ -244,6 +252,7 @@
     <Folder Include="routes\customers\" />
     <Folder Include="routes\messages\" />
     <Folder Include="routes\metadata\" />
+    <Folder Include="routes\transactionRequests\" />
     <Folder Include="routes\users\" />
     <Folder Include="routes\otherAccounts\" />
     <Folder Include="routes\products\" />
@@ -259,6 +268,7 @@
     <Folder Include="services\metadata\" />
     <Folder Include="services\otherAccounts\" />
     <Folder Include="services\products\" />
+    <Folder Include="services\transactionRequests\" />
     <Folder Include="services\transactions\" />
     <Folder Include="services\users\" />
     <Folder Include="services\views\" />
@@ -270,6 +280,7 @@
     <Folder Include="typings\express-serve-static-core\" />
     <Folder Include="typings\express\" />
     <Folder Include="typings\form-data\" />
+    <Folder Include="typings\iban\" />
     <Folder Include="typings\mime\" />
     <Folder Include="typings\mongoose-deep-populate\" />
     <Folder Include="typings\mongoose\" />
@@ -310,6 +321,7 @@
     <Compile Include="models\metadata\model.js" />
     <Compile Include="models\otherAccounts\model.js" />
     <Compile Include="models\products\model.js" />
+    <Compile Include="models\transactionRequests\model.js" />
     <Compile Include="models\transactions\model.js" />
     <Compile Include="models\users\model.js" />
     <Compile Include="models\views\model.js" />
@@ -325,6 +337,7 @@
     <Compile Include="routes\metadata\routes.js" />
     <Compile Include="routes\otherAccounts\routes.js" />
     <Compile Include="routes\products\routes.js" />
+    <Compile Include="routes\transactionRequests\routes.js" />
     <Compile Include="routes\transactions\routes.js" />
     <Compile Include="routes\users\routes.js" />
     <Compile Include="routes\views\routes.js" />
@@ -338,6 +351,7 @@
     <Compile Include="services\metadata\service.js" />
     <Compile Include="services\otherAccounts\service.js" />
     <Compile Include="services\products\service.js" />
+    <Compile Include="services\transactionRequests\service.js" />
     <Compile Include="services\transactions\service.js" />
     <Compile Include="services\users\service.js" />
     <Compile Include="services\views\service.js" />

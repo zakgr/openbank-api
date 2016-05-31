@@ -87,7 +87,7 @@ export function listId(string: string) {
     var deferred = Q.defer();
     var theaccount = mongoose.model('account', accountmodel._schema);
     theaccount.findOne(string).lean()
-        .select('_id')
+        .select('_id balance.type.currency')
         .exec(function (err, found) {
             found = transform(found);
             commonservice.answer(err, found, name, deferred);
