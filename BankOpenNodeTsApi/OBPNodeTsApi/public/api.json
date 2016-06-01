@@ -5,7 +5,7 @@
         "description": "DEFAULT",
         "version": "0.0.9"
     },
-    "host": "localhost:3005",
+    "host": "nbgnodeapi.cloudapp.net",
     "basePath": "/",
     "schemes": [
         "http"
@@ -4847,7 +4847,15 @@
             ],
             "properties": {
                 "balance": {
-                    "type": "number"
+                    "type": "object",
+                    "properties": {
+                        "currency": {
+                            "type": "string"
+                        },
+                        "amount": {
+                            "type": "number"
+                        }
+                    }
                 },
                 "bank_id": {
                     "type": "array",
