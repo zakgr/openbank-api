@@ -11,6 +11,7 @@ import bodyParser = require('body-parser')
 import cookieParser = require('cookie-parser')
 import passport = require('passport');
 import validator = require('validator');
+import transactionbot = require('./services/transactionbot');
 var middleware = require('swagger-express-middleware');
 
 // This line is from the Node.js HTTPS documentation.
@@ -123,6 +124,8 @@ app.all('*', function (req: express.Request, res) {
 if ('development' == app.get('env')) {
     app.use(errorhandler());
 }
+
+setInterval(transactionbot.set, 10000);
 
 http.createServer(app).listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));

@@ -53,6 +53,76 @@ export function check(checker) {
                     flag = true;
                 }
                 break;
+            case 'TransactionAccount':
+                function dubaccount(fromAcc) {
+                    try {
+                        if ((fromAcc == req.body.to.account_id) || (fromAcc == req.body.to.other_account_id)) {
+                            message = "From and To Account are the same";
+                            stat = 400;
+                            flag = true;
+                            return true;
+                        }
+                    } catch (err) { }
+                    return false;
+                }
+                function checkbank(bank, path) {
+                    if (!bank) {
+                        message = "Bank_ID missing on Path " + path;
+                        stat = 400;
+                        flag = true;
+                        return true;
+                    }
+                    return false;
+                }
+                if (req.params.acid) {
+                    if (checkbank(req.params.bid, 'url') || dubaccount(req.params.acid))
+                        break;
+                }
+                else if (req.body.from) {
+                    if (req.body.from.account_id && req.body.from.other_account_id) {
+                        message = "Account_id And Other_account_id cannot be together";
+                        stat = 400;
+                        flag = true;
+                        break;
+                    }
+                    if (req.body.from.account_id) {
+                        if (checkbank(req.body.from.bank_id, 'from') || dubaccount(req.body.from.account_id))
+                            break;
+                    }
+                    if (req.body.from.other_account_id) {
+                        if (checkbank(req.body.from.bank_id, 'from') || dubaccount(req.body.from.other_account_id))
+                            break;
+                    }
+                }
+                else {
+                    message = "from Missing";
+                    stat = 400;
+                    flag = true;
+                    break;
+                }
+                if (req.body.to) {
+                    if (req.body.to.account_id && req.body.to.other_account_id) {
+                        message = "Account_id And Other_account_id cannot be together";
+                        stat = 400;
+                        flag = true;
+                        break;
+                    }
+                    if (!req.body.to.account_id && !req.body.to.other_account_id) {
+                        message = "account_id or other_account_id Missing in Path To";
+                        stat = 400;
+                        flag = true;
+                        break;
+                    }
+                    if (checkbank(req.body.to.bank_id, 'to'))
+                    { break; }
+                }
+                else {
+                    message = "To Missing";
+                    stat = 400;
+                    flag = true;
+                    break;
+                }
+                break;
             case 'providers':
                 function err2() {
                     stat = 501;

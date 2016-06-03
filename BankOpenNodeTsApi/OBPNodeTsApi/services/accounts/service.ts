@@ -12,7 +12,7 @@ function checkview(schemaView, rq) {
             //console.log("viewid", index);
             if (view.id == rq.view.id) {
                 if (!view.can_see_bank_account_balance && !view.can_see_bank_account_currency) { delete ret.balance; }
-                if (!view.can_see_bank_account_balance && view.can_see_bank_account_currency) { delete ret.balance.ammount; }
+                if (!view.can_see_bank_account_balance && view.can_see_bank_account_currency) { delete ret.balance.amount; }
                 //if (!view.can_see_bank_account_bank_name){delete ret.bank;}
                 if (!view.can_see_bank_account_iban) { delete ret.IBAN; }
                 if (!view.can_see_bank_account_label) { delete ret.label; }
@@ -87,9 +87,12 @@ export function listId(string: string) {
     var deferred = Q.defer();
     var theaccount = mongoose.model('account', accountmodel._schema);
     theaccount.findOne(string).lean()
-        .select('_id balance.type.currency')
+        .select('_id balance')
         .exec(function (err, found) {
-            found = transform(found);
+            if (found) {
+                delete found['balance'].amount;
+                found = transform(found);
+            }
             commonservice.answer(err, found, name, deferred);
         });
     return deferred.promise;
@@ -150,7 +153,7 @@ export function setid(string, object) {
     var deferred = Q.defer();
     //var insert = {$push:{ views_available: object }};
     var theaccount = mongoose.model('account', accountmodel._schema);
-    theaccount.findByIdAndUpdate(string._id, object, { new: true },
+    theaccount.findOneAndUpdate(string, object, { new: true },
         function (err2, found) {
             if (err2) deferred.resolve({ error: err2, status: 400 });
             else if (!found) { deferred.resolve({ error: "Item not exists", status: 409 }) }

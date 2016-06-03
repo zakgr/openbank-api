@@ -2,21 +2,18 @@ import mongoose = require('mongoose');
 import common = require("../commoninterfaces");
 
 export interface transactionRequestdef extends mongoose.Document {
-    bank_id: string;
-    account_id: any;
+    bank_id?: string;
+    account_id?: any;
     type?: any;
     resource_url?: any;
-    description?: any;
-    body: {
-        to: {
-            bank_id: string,
-            account_id: any,
-        }
-        description?: string,
-        value: {
-            currency: string,
-            amount: number
-        }
+    to: {
+        bank_id: string,
+        account_id: any,
+    }
+    description?: string,
+    value: {
+        currency: string,
+        amount: number
     }
     transaction_ids?: any;
     status?: any;
@@ -30,26 +27,23 @@ export interface transactionRequestdef extends mongoose.Document {
 
 export class transactionRequest {
     _schema: mongoose.Schema = new mongoose.Schema({
-        bank_id: { type: mongoose.Schema.Types.ObjectId, trim: true, required: true },
-        account_id: { type: mongoose.Schema.Types.ObjectId, trim: true, require: true },
+        bank_id: { type: mongoose.Schema.Types.ObjectId, trim: true },
+        account_id: { type: mongoose.Schema.Types.ObjectId, trim: true },
         type: { type: String, trim: true },
         resource_url: { type: String, trim: true },
-        description: { type: String, trim: true },
-        body: {
-            to: {
-                bank_id: { type: mongoose.Schema.Types.ObjectId, trim: true, require: true },
-                account_id: { type: mongoose.Schema.Types.ObjectId, trim: true, require: true },
-            },
-            value: {
-                currency: { type: String, trim: true, enum: common.currency, require: true },
-                amount: { type: Number, require: true }
-            },
-            description: { type: String, trim: true }
+        to: {
+            bank_id: { type: mongoose.Schema.Types.ObjectId, trim: true, required: true },
+            account_id: { type: mongoose.Schema.Types.ObjectId, trim: true, required: true },
         },
-        transaction_ids: { type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'transaction' }], required: true },
+        value: {
+            currency: { type: String, trim: true, enum: common.currency, required: true },
+            amount: { type: Number, required: true }
+        },
+        description: { type: String, trim: true },
+        transaction_ids: { type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'transaction' }] },
         status: { type: String, trim: true, default: 'INITIATED', enum: ['INITIATED', 'COMPLETED', 'CHALLENGES_PENDING', 'FAILED'] },
         end_date: Date,
-        supported_challenge_types: { type: [String], required: true },
+        supported_challenge_types: { type: [String] },
         challenge: {
             allowed_attempts: Number,
             challenge_type: { type: String, trim: true }
@@ -58,7 +52,7 @@ export class transactionRequest {
     },
         { timestamps: true }
     )
-        .index({ bank_id: 1, account_id: -1 }, { unique: true })
+        //.index({ bank_id: 1, account_id: -1 }, { unique: true })
         .pre('save', function (next) {
             //this.updated = new Date();
             next();

@@ -5,7 +5,7 @@
         "description": "DEFAULT",
         "version": "0.0.9"
     },
-    "host": "nbgnodeapi.cloudapp.net",
+    "host": "localhost:3005",
     "basePath": "/",
     "schemes": [
         "http"

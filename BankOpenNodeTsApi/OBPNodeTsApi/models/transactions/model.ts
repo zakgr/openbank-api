@@ -5,7 +5,6 @@ export interface transactiondef extends mongoose.Document {
     uuid?: string;
     this_account?: any;
     other_account?: any;
-    this_account_insystem?: any;
     other_account_insystem?: any;
     details: {
         status: string,
@@ -31,6 +30,7 @@ export interface transactiondef extends mongoose.Document {
         }
     }
     metadata?: transactionMetadata;
+    transactionRequest?: any;
 }
 
 export interface transactionHolder {
@@ -78,9 +78,8 @@ export class transaction {
             }
         },
 
-        this_account: { type: mongoose.Schema.Types.ObjectId, ref: 'otherAccount' },
+        this_account: { type: mongoose.Schema.Types.ObjectId, ref: 'account' },
         other_account: { type: mongoose.Schema.Types.ObjectId, ref: 'otherAccount' },
-        this_account_insystem: { type: mongoose.Schema.Types.ObjectId, ref: 'account' },
         other_account_insystem: { type: mongoose.Schema.Types.ObjectId, ref: 'account' },
 
         metadata: {
@@ -89,7 +88,7 @@ export class transaction {
             tags: { type: mongoose.Schema.Types.ObjectId, ref: 'metadata' },
             where: { type: mongoose.Schema.Types.ObjectId, ref: 'metadata' },
         },
-
+        transactionRequest: { type: mongoose.Schema.Types.ObjectId, ref: 'transactionRequest' }
     },
         { timestamps: true }
     )

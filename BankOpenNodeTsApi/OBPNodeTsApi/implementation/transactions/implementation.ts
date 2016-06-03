@@ -35,65 +35,13 @@ export function listmore(req: express.Request, res: express.Response, next) {
     }
 };
 export function set(req: express.Request, res: express.Response, next) {
-    function transaction() {
-        if (fromaccount && toacccount) {
-            input.details.posted = new Date().toISOString();
-            transactionsservice.set(question, input).then(
-                function (resp) {
-                    commonfunct.response(resp, name, res, next)
-                });
-        }
-    }
     var question: any = {};
     var input = req.body;
-    var fromaccount: boolean, toacccount: boolean;
-    input.details = {};
-    input.details.posted_by_user_id = req.user.id.toString();
-    input.details.posted_by_ip_address = req.ip;
-    input.details.type = req.params.type;
-    input.details.description = input.description;
-    input.details.value = input.value;
-    delete input.description;
-    delete input.value;
-
     if (req.params.id) { question._id = req.params.id; }
-    if (input.from.other_account_id) {
-        input.this_account = input.from.other_account_id;
-        fromaccount = true;
-    }
-    else if (input.from.account_id && input.from.bank_id) {
-        question.from = {};
-        question.from._id = input.from.account_id;
-        question.from.bank_id = input.from.bank_id;
-        accountsservice.listId(question.from).then(function (resp) {
-            if (resp['data']) {
-                fromaccount = true;
-                input.this_account_insystem = input.from.account_id;
-                delete question.from;
-                Q.nextTick(transaction);
-            }
-            else commonfunct.response(resp, name, res, next)
+    transactionsservice.set(question, input).then(
+        function (resp) {
+            commonfunct.response(resp, name, res, next)
         });
-    }
-    if (input.to.other_account_id) {
-        input.other_account = input.to.other_account_id;
-        toacccount = true;
-    }
-    else if (input.to.account_id && input.to.bank_id) {
-        question.to = {};
-        question.to._id = input.to.account_id;
-        question.to.bank_id = input.to.bank_id;
-        accountsservice.listId(question.to).then(function (resp) {
-            if (resp['data']) {
-                toacccount = true;
-                input.other_account_insystem = input.to.account_id;
-                delete question.to;
-                Q.nextTick(transaction);
-            }
-            else commonfunct.response(resp, name, res, next)
-        });
-    }
-    Q.nextTick(transaction);
 };
 export function del(req: express.Request, res: express.Response, next) {
     var question: any = {};

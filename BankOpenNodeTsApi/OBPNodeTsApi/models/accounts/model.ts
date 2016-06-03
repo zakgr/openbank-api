@@ -11,7 +11,7 @@ export interface accountdef extends mongoose.Document {
     owners: any;
     //here is product for nbg
     type: any;
-    balance: { currency: string, ammount: number };
+    balance: { currency: string, amount: number };
     IBAN: string;
     swift_bic?: string;
     // views to be implemented
@@ -27,18 +27,20 @@ export class account {
         number: { type: String, required: true, trim: true, select: false },
         owners: { type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'customer' }], select: false },
         type: { type: mongoose.Schema.Types.ObjectId, ref: 'product', required: true, select: false },
-        balance: {
-            type: {
+        balance: {type:
+            {
                 currency: { type: String, required: true, enum: common.currency },
-                ammount: { type: Number, required: true }
+                amount: { type: Number, required: true }
             }, select: false
         },
-        IBAN: { type: String, required: true, index: { unique: true },validate: {
-          validator: function(v) {
-            return IBAN.isValid(v);
-          },
-          message: '{VALUE} is not a valid IBAN!'
-        }, trim: true, select: false },
+        IBAN: {
+            type: String, required: true, index: { unique: true }, validate: {
+                validator: function (v) {
+                    return IBAN.isValid(v);
+                },
+                message: '{VALUE} is not a valid IBAN!'
+            }, trim: true, select: false
+        },
         swift_bic: { type: String, trim: true, select: false },
         views_available: { type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'view' }], required: true },
         meta: { type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'metadata' }], select: false },
