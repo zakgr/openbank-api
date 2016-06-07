@@ -34,12 +34,13 @@ export function set(req: express.Request, res: express.Response, next) {
                 if (resp['data']) {
                     delete resp['data'].supported_challenge_types;
                 }
-                commonfunct.response(resp, name, res, next)
-
+                commonfunct.response(resp, name, res, next);
             });
     }
     function transactionRequest() {
         if (fromaccount && toacccount) {
+            fromaccount = false;
+            toacccount = false;
             var otheraccount: Boolean = false;
             transaction.details.posted = new Date().toISOString();
             //missing code for challange check
@@ -60,7 +61,7 @@ export function set(req: express.Request, res: express.Response, next) {
                                         Q.nextTick(setRequest);
                                     }
                                 });
-                        }
+                        };
                         if (transaction.other_account_insystem) {
                             otheraccount = true;
                             transaction.details.value.amount = -1 * input.value.amount;
@@ -73,10 +74,10 @@ export function set(req: express.Request, res: express.Response, next) {
                                     input.value.amount = -1 * input.value.amount;
                                     Q.nextTick(setRequest);
                                 });
-                        }
+                        };
                     }
-                    else { setRequest() }
-                }
+                    else { setRequest() };
+                };
             });
         }
     }
@@ -94,14 +95,14 @@ export function set(req: express.Request, res: express.Response, next) {
         transaction.details.type = req.params.type;
         transaction.details.description = input.description;
         transaction.details.value = input.value;
-
+        question.from = {};
         if (req.params.id) { question._id = req.params.id; };
         if (req.params.acid || input.from.account_id) {
             var temp: any = {};
             if (req.params.acid) {
-                temp.bank_id = req.params.acid;
+                temp.bank_id = req.params.bid;
                 temp.account_id = req.params.acid;
-                question.from.views_available = input.params.vid;
+                question.from.views_available = req.params.vid;
             }
             else {
                 temp.bank_id = input.from.bank_id;
@@ -109,7 +110,7 @@ export function set(req: express.Request, res: express.Response, next) {
             }
             input.bank_id = temp.bank_id;
             input.account_id = temp.account_id;
-            question.from = {};
+
             question.from.bank_id = temp.bank_id;
             question.from._id = temp.account_id;
             accountsservice.listId(question.from).then(function (resp) {
@@ -130,7 +131,7 @@ export function set(req: express.Request, res: express.Response, next) {
             input.from.account_id = input.from.other_account_id;
             fromaccount = true;
         };
-        
+
         if (input.to.account_id) {
             question.to = {};
             question.to._id = input.to.account_id;

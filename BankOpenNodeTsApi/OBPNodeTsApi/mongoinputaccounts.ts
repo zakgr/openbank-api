@@ -37,7 +37,7 @@ lineReader.on('line', function (line) {
             balance:
             {
                 currency: 'EUR',
-                amount: items[3].toString()
+                amount: parseFloat(items[3]),
             },
             IBAN: IBAN.fromBBAN("GR", "1234567890123" + items[0].toString()),
             is_public: items[4],

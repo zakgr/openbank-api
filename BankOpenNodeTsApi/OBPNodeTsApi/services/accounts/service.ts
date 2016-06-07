@@ -153,8 +153,9 @@ export function setid(string, object) {
     var deferred = Q.defer();
     //var insert = {$push:{ views_available: object }};
     var theaccount = mongoose.model('account', accountmodel._schema);
-    theaccount.findOneAndUpdate(string, object, { new: true },
-        function (err2, found) {
+    theaccount.findOneAndUpdate(string, { $inc: { 'balance.amount': object } }, { new: true })
+        .select('balance')
+        .exec(function (err2, found) {
             if (err2) deferred.resolve({ error: err2, status: 400 });
             else if (!found) { deferred.resolve({ error: "Item not exists", status: 409 }) }
             else {
