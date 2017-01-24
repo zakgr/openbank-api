@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "title": "REST Bank Open Api  by NBG ",
-        "description": "DEFAULT",
+        "description": "A developer preview of the brand new Nbg Ibank Api. Play in the api playground, connect it to your new app or just download from git a fully working sandbox.",
         "version": "0.0.9"
     },
     "host": "localhost:3005",
